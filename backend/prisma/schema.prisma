@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  Admin
+  Staff
+  Pharmacist
+  Doctor
+  Receptionist
+  InventoryManager
+}
+
+enum UserStatus {
+  Active
+  Inactive
+}
+
+enum SupplierStatus {
+  Active
+  Inactive
+}
+
+enum PrescriptionStatus {
+  Pending
+  Completed
+  Overdue
+}
+
+enum HistoryType {
+  Import
+  Request
+  Issued
+  Alert
+  Stock
+  Staff
+  Supplier
+  Settings
+}
+
+model User {
+  id           String     @id @default(cuid())
+  staffId      String     @unique
+  name         String
+  username     String     @unique
+  email        String?    @unique
+  passwordHash String
+  role         UserRole   @default(Staff)
+  status       UserStatus @default(Active)
+  refreshTokens RefreshToken[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Medicine {
+  uid          Int      @id @default(autoincrement())
+  medicineId   String   @unique
+  name         String
+  category     String
+  qty          Int      @default(0)
+  expiry       String
+  supplier     String
+  price        Float
+  minThreshold Int      @default(50)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Supplier {
+  id            String         @id @default(cuid())
+  supplierId    String         @unique
+  name          String
+  contactPerson String
+  phone         String
+  email         String
+  status        SupplierStatus @default(Active)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Prescription {
+  id                String             @id @default(cuid())
+  token             String             @unique
+  patientName       String             @default("")
+  patientNo         String
+  doctor            String
+  date              String
+  medicines         Json
+  consultationFee   Float              @default(0)
+  additionalCharges Json
+  totalAmount       Float
+  discount          Float              @default(0)
+  status            PrescriptionStatus @default(Pending)
+  issuedAt          String?
+  issuedBy          String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model HistoryLog {
+  id        String      @id @default(cuid())
+  historyId String      @unique
+  time      String
+  type      HistoryType
+  reference String
+  detail    String
+  user      String
+  createdAt DateTime    @default(now())
+}
+
+model PharmacySettings {
+  id                     Int     @id @default(1)
+  name                   String
+  address                String
+  phone                  String
+  website                String
+  defaultConsultationFee Float   @default(1500)
+  lowStockThreshold      Int     @default(50)
+  enableQrCode           Boolean @default(true)
+  taxRate                Float   @default(2.5)
+  expiryReminderDays     Int     @default(30)
+  emailNotifications     Boolean @default(true)
+  systemAlerts           Boolean @default(true)
+  tokenPrefix            String  @default("TKN")
+  currency               String  @default("LKR")
+  dateFormat             String  @default("YYYY-MM-DD HH:mm")
+  timeZone               String  @default("Asia/Colombo")
+  autoBackup             Boolean @default(true)
+  autoBackupFrequency    String  @default("Daily")
+  printerPaperSize       String  @default("80mm")
+  printerMargins         String  @default("0.5in")
+  sessionTimeout         Int     @default(30)
+  enable2Fa              Boolean @default(false)
+}
+
+model PharmacyBranch {
+  id        String   @id @default(cuid())
+  branchId  String   @unique
+  name      String
+  address   String
+  phone     String
+  isMain    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ServiceFee {
+  id         String @id @default(cuid())
+  feeId      String @unique
+  name       String
+  defaultFee Float
+}

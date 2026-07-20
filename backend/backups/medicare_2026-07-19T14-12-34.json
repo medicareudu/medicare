@@ -1,0 +1,733 @@
+{
+  "backupMeta": {
+    "exportedAt": "2026-07-19T14:12:34.963Z",
+    "source": "scheduled",
+    "recordsCount": {
+      "medicines": 6,
+      "suppliers": 4,
+      "prescriptions": 2,
+      "staff": 3,
+      "branches": 3,
+      "history": 54,
+      "serviceFees": 7
+    }
+  },
+  "medicines": [
+    {
+      "_uid": 31,
+      "id": "MED-289",
+      "name": "Amoxicillin 500mg",
+      "category": "Antibiotic",
+      "qty": 200,
+      "expiry": "2026-07-30",
+      "supplier": "MedPlus",
+      "price": 20,
+      "minThreshold": 50
+    },
+    {
+      "_uid": 32,
+      "id": "MED-003",
+      "name": "Metformin 850mg",
+      "category": "Antidiabetic",
+      "qty": 600,
+      "expiry": "2027-03-10",
+      "supplier": "MediSupply",
+      "price": 15.4,
+      "minThreshold": 50
+    },
+    {
+      "_uid": 33,
+      "id": "MED-004",
+      "name": "Atorvastatin 10mg",
+      "category": "Statin",
+      "qty": 260,
+      "expiry": "2026-06-30",
+      "supplier": "MediSupply",
+      "price": 35,
+      "minThreshold": 50
+    },
+    {
+      "_uid": 34,
+      "id": "MED-005",
+      "name": "Omeprazole 20mg",
+      "category": "Antacid",
+      "qty": 800,
+      "expiry": "2026-09-05",
+      "supplier": "MediSupply",
+      "price": 18.2,
+      "minThreshold": 50
+    },
+    {
+      "_uid": 35,
+      "id": "MED-006",
+      "name": "Amlodipine 5mg",
+      "category": "Antihypertensive",
+      "qty": 500,
+      "expiry": "2026-11-12",
+      "supplier": "MediSupply",
+      "price": 22.5,
+      "minThreshold": 50
+    },
+    {
+      "_uid": 36,
+      "id": "MED-007",
+      "name": "qwertyu",
+      "category": "Anatacid",
+      "qty": 1000,
+      "expiry": "2026-10-11",
+      "supplier": "Oshidi",
+      "price": 15,
+      "minThreshold": 50
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "SUP-003",
+      "name": "MedPlus",
+      "contactPerson": "Nisha Perera",
+      "phone": "076-9876543",
+      "email": "nisha@medplus.lk",
+      "status": "Active"
+    },
+    {
+      "id": "SUP-002",
+      "name": "MediSupply",
+      "contactPerson": "Anura Bandara",
+      "phone": "071-7654321",
+      "email": "anura@medisupply.lk",
+      "status": "Active"
+    },
+    {
+      "id": "SUP-001",
+      "name": "PharmaCo",
+      "contactPerson": "Saman Kumara",
+      "phone": "077-1234567",
+      "email": "saman@pharmaco.com",
+      "status": "Active"
+    },
+    {
+      "id": "SUP-502",
+      "name": "sdfg",
+      "contactPerson": "sdghjkl",
+      "phone": "0771546268",
+      "email": "qwerty@gmail.com",
+      "status": "Active"
+    }
+  ],
+  "staff": [
+    {
+      "id": "STF-001",
+      "name": "Admin",
+      "username": "admin",
+      "email": "admin@medicare.com",
+      "role": "Admin",
+      "status": "Active"
+    },
+    {
+      "id": "STF-876",
+      "name": "Oshidi Yapa",
+      "username": "oshidi",
+      "email": "ishmithabimsarani@gmail.com",
+      "role": "Staff",
+      "status": "Active"
+    },
+    {
+      "id": "STF-002",
+      "name": "Staff",
+      "username": "staff",
+      "email": "staff@medicare.com",
+      "role": "Staff",
+      "status": "Active"
+    }
+  ],
+  "staffAuth": [
+    {
+      "staffId": "STF-001",
+      "passwordHash": "$2b$10$qEdNj5nYtzvVb/uPuu333.dKKbq9zL6CfdyxCDjDpBUgDHuYl/1Py"
+    },
+    {
+      "staffId": "STF-002",
+      "passwordHash": "$2b$10$Q6BxJ/vROqPn0JOmTvyyM.1B0TSBBI9UEaOMhZbcGD8JjKkeJcIdy"
+    },
+    {
+      "staffId": "STF-876",
+      "passwordHash": "$2b$10$ttfm4HPCEfs45PXFoJ8wjusZp9fJ2uM8N.KvDZE1ChJS7LRZJp6x."
+    }
+  ],
+  "pharmacyInfo": {
+    "id": 1,
+    "name": "qwerty",
+    "address": "123 Hospital Road, Kandy, Sri Lanka",
+    "phone": "081-234-5678",
+    "website": "medicareclinic.lk",
+    "defaultConsultationFee": 900,
+    "lowStockThreshold": 50,
+    "enableQrCode": true,
+    "taxRate": 2.5,
+    "expiryReminderDays": 30,
+    "emailNotifications": true,
+    "systemAlerts": true,
+    "tokenPrefix": "TKN",
+    "currency": "LKR",
+    "dateFormat": "YYYY-MM-DD HH:mm",
+    "timeZone": "Asia/Colombo",
+    "autoBackup": true,
+    "autoBackupFrequency": "Daily",
+    "printerPaperSize": "80mm",
+    "printerMargins": "0.5in",
+    "sessionTimeout": 30,
+    "enable2Fa": false
+  },
+  "branches": [
+    {
+      "id": "BR-001",
+      "name": "MediCare Main Pharmacy",
+      "address": "123 Hospital Road, Kandy",
+      "phone": "081-234-5678",
+      "isMain": true
+    },
+    {
+      "id": "BR-002",
+      "name": "MediCare Town Branch",
+      "address": "45 Colombo Street, Kandy",
+      "phone": "081-234-9988",
+      "isMain": false
+    },
+    {
+      "id": "BR-703",
+      "name": "Town Square",
+      "address": "kiribathkumbura, Kandy",
+      "phone": "0771546268",
+      "isMain": false
+    }
+  ],
+  "prescriptions": [
+    {
+      "token": "TKN-00129",
+      "patientName": "ASDFTYUIO",
+      "patientNo": "REQ-2026-002",
+      "doctor": "Admin",
+      "date": "2026-07-19 07:53",
+      "medicines": [
+        {
+          "qty": 400,
+          "name": "Amoxicillin 500mg",
+          "unit": "tablets",
+          "price": 40,
+          "medicineId": "MED-002"
+        }
+      ],
+      "consultationFee": 900,
+      "additionalCharges": [
+        {
+          "fee": 1200,
+          "name": "ECG service",
+          "checked": true
+        }
+      ],
+      "totalAmount": 18100,
+      "status": "Completed",
+      "issuedAt": "2026-07-19 13:24",
+      "issuedBy": "Staff"
+    },
+    {
+      "token": "TKN-00128",
+      "patientName": "wer",
+      "patientNo": "REQ-2026-001",
+      "doctor": "Admin",
+      "date": "2026-07-19 07:39",
+      "medicines": [
+        {
+          "qty": 40,
+          "name": "Atorvastatin 10mg",
+          "unit": "tablets",
+          "price": 35,
+          "medicineId": "MED-004"
+        }
+      ],
+      "consultationFee": 900,
+      "additionalCharges": [
+        {
+          "fee": 1200,
+          "name": "ECG service",
+          "checked": true
+        }
+      ],
+      "totalAmount": 3500,
+      "status": "Completed",
+      "issuedAt": "2026-07-19 13:21",
+      "issuedBy": "Staff"
+    }
+  ],
+  "history": [
+    {
+      "id": "HIST-36914",
+      "time": "2026-07-19 19:28",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-79065",
+      "time": "2026-07-19 19:23",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-82124",
+      "time": "2026-07-19 19:22",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-71207",
+      "time": "2026-07-19 19:22",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-09660",
+      "time": "2026-07-19 19:21",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-31981",
+      "time": "2026-07-19 13:59",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-33709",
+      "time": "2026-07-19 13:53",
+      "type": "Stock",
+      "reference": "MED-289",
+      "detail": "Restocked medicine via manual add: Amoxicillin 500mg (+100 units, total: 200)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-13969",
+      "time": "2026-07-19 13:49",
+      "type": "Stock",
+      "reference": "MED-045",
+      "detail": "Deleted medicine record: Amoxicillin",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-24122",
+      "time": "2026-07-19 13:48",
+      "type": "Stock",
+      "reference": "MED-078",
+      "detail": "Restocked medicine via manual add: Amoxicillin 500mg (+100 units, total: 100)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-30167",
+      "time": "2026-07-19 13:47",
+      "type": "Stock",
+      "reference": "MED-713",
+      "detail": "Deleted medicine record: Amoxicillin 500mg",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-94099",
+      "time": "2026-07-19 13:46",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-03504",
+      "time": "2026-07-19 13:27",
+      "type": "Stock",
+      "reference": "MED-713",
+      "detail": "Added new medicine: Amoxicillin 500mg (100 units)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-83743",
+      "time": "2026-07-19 13:26",
+      "type": "Stock",
+      "reference": "MED-045",
+      "detail": "Added new medicine: Amoxicillin (100 units)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-65298",
+      "time": "2026-07-19 13:25",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-45543",
+      "time": "2026-07-19 13:24",
+      "type": "Staff",
+      "reference": "STF-002",
+      "detail": "User Staff logged out",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-62661",
+      "time": "2026-07-19 13:24",
+      "type": "Alert",
+      "reference": "MED-002",
+      "detail": "Low stock alert — Amoxicillin 500mg is at 0 units (threshold: 50). Admin notified to reorder.",
+      "user": "System"
+    },
+    {
+      "id": "HIST-97527",
+      "time": "2026-07-19 13:24",
+      "type": "Request",
+      "reference": "TKN-00129",
+      "detail": "Request TKN-00129 marked as Completed by Staff.",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-11472",
+      "time": "2026-07-19 13:24",
+      "type": "Issued",
+      "reference": "TKN-00129",
+      "detail": "Medicines issued for request TKN-00129. Items: Amoxicillin 500mg (x400). Stock deducted from inventory.",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-20649",
+      "time": "2026-07-19 13:24",
+      "type": "Staff",
+      "reference": "STF-002",
+      "detail": "User Staff logged in successfully",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-09968",
+      "time": "2026-07-19 13:23",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-94920",
+      "time": "2026-07-19 13:23",
+      "type": "Request",
+      "reference": "TKN-00129",
+      "detail": "Medicine request created — 1 medicine(s), ref REQ-2026-002. Tests: ECG service. Token TKN-00129 sent to Staff dashboard.",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-29729",
+      "time": "2026-07-19 13:21",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-69112",
+      "time": "2026-07-19 13:21",
+      "type": "Staff",
+      "reference": "STF-002",
+      "detail": "User Staff logged out",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-71324",
+      "time": "2026-07-19 13:21",
+      "type": "Request",
+      "reference": "TKN-00128",
+      "detail": "Request TKN-00128 marked as Completed by Staff.",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-84735",
+      "time": "2026-07-19 13:21",
+      "type": "Issued",
+      "reference": "TKN-00128",
+      "detail": "Medicines issued for request TKN-00128. Items: Atorvastatin 10mg (x40). Stock deducted from inventory.",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-47912",
+      "time": "2026-07-19 13:20",
+      "type": "Staff",
+      "reference": "STF-002",
+      "detail": "User Staff logged in successfully",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-58077",
+      "time": "2026-07-19 13:20",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-21073",
+      "time": "2026-07-19 13:20",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Updated staff profile for: Oshidi Yapa",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-88287",
+      "time": "2026-07-19 13:20",
+      "type": "Staff",
+      "reference": "STF-002",
+      "detail": "Updated staff profile for: Staff",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-86975",
+      "time": "2026-07-19 13:19",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-55764",
+      "time": "2026-07-19 13:19",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-15198",
+      "time": "2026-07-19 13:10",
+      "type": "Request",
+      "reference": "TKN-00128",
+      "detail": "Medicine request created — 1 medicine(s), ref REQ-2026-001. Tests: ECG service. Token TKN-00128 sent to Staff dashboard.",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-76616",
+      "time": "2026-07-19 13:09",
+      "type": "Import",
+      "reference": "IMPORT-53627",
+      "detail": "6 medicine records imported from MediSupply Excel file (0 new, 6 stock merged, 0 skipped)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-68012",
+      "time": "2026-07-19 13:09",
+      "type": "Import",
+      "reference": "IMPORT-47978",
+      "detail": "6 medicine records imported from MediSupply Excel file (6 new, 0 stock merged, 0 skipped)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-61770",
+      "time": "2026-07-19 13:08",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-12638",
+      "time": "2026-07-19 13:08",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "User Oshidi Yapa logged out",
+      "user": "Oshidi Yapa"
+    },
+    {
+      "id": "HIST-68337",
+      "time": "2026-07-19 13:05",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "User Oshidi Yapa logged in successfully",
+      "user": "Oshidi Yapa"
+    },
+    {
+      "id": "HIST-16164",
+      "time": "2026-07-19 13:05",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Password recovery email sent to ishmithabimsarani@gmail.com for user Oshidi Yapa. Temp password: medicare4257. ",
+      "user": "System Recovery"
+    },
+    {
+      "id": "HIST-63317",
+      "time": "2026-07-19 12:35",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Password recovery email sent to ishmithabimsarani@gmail.com for user Oshidi Yapa. Temp password: medicare4335. Preview URL: https://ethereal.email/message/alx3PUMohzqafI2jalx3QfraIFk9OmezAAAAAQXiPYBPb2x3oAMY-HvaPEo",
+      "user": "System Recovery"
+    },
+    {
+      "id": "HIST-71500",
+      "time": "2026-07-19 12:28",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Password recovery email sent to ishmithabimsarani@gmail.com for user Oshidi Yapa. Temp password: medicare5583",
+      "user": "System Recovery"
+    },
+    {
+      "id": "HIST-69633",
+      "time": "2026-07-19 12:25",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "User Oshidi Yapa logged out",
+      "user": "Oshidi Yapa"
+    },
+    {
+      "id": "HIST-62374",
+      "time": "2026-07-19 12:25",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "User Oshidi Yapa logged in successfully",
+      "user": "Oshidi Yapa"
+    },
+    {
+      "id": "HIST-67622",
+      "time": "2026-07-19 12:25",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-89094",
+      "time": "2026-07-19 12:24",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Updated staff profile for: Oshidi Yapa",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-93831",
+      "time": "2026-07-19 12:24",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-38605",
+      "time": "2026-07-19 11:56",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Simulated password reset email sent to ishmithabimsarani@gmail.com for user Oshidi Yapa. Temp password: medicare9030",
+      "user": "System Recovery"
+    },
+    {
+      "id": "HIST-05920",
+      "time": "2026-07-19 11:54",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Simulated password reset email sent to ishmithabimsarani@gmail.com for user Oshidi Yapa. Temp password: medicare3914",
+      "user": "System Recovery"
+    },
+    {
+      "id": "HIST-84634",
+      "time": "2026-07-19 11:54",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "User Oshidi Yapa logged out",
+      "user": "Oshidi Yapa"
+    },
+    {
+      "id": "HIST-64266",
+      "time": "2026-07-19 11:53",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "User Oshidi Yapa logged in successfully",
+      "user": "Oshidi Yapa"
+    },
+    {
+      "id": "HIST-94504",
+      "time": "2026-07-19 11:53",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-80887",
+      "time": "2026-07-19 11:53",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Added staff member: Oshidi Yapa (Staff)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-32499",
+      "time": "2026-07-19 11:52",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-43521",
+      "time": "2026-07-19 11:52",
+      "type": "Staff",
+      "reference": "STF-002",
+      "detail": "Simulated password reset email sent to staff@medicare.com for user Staff. Temp password: medicare5376",
+      "user": "System Recovery"
+    },
+    {
+      "id": "HIST-00001",
+      "time": "2026-07-19 06:16",
+      "type": "Settings",
+      "reference": "SYSTEM_INIT",
+      "detail": "System initialized. Medicine inventory is empty — use Excel Import to load supplier records.",
+      "user": "System"
+    }
+  ],
+  "serviceFees": [
+    {
+      "id": "fee-2",
+      "name": "ECG service",
+      "defaultFee": 1200
+    },
+    {
+      "id": "fee-3",
+      "name": "EEG service",
+      "defaultFee": 1800
+    },
+    {
+      "id": "fee-4",
+      "name": "Medical procedure",
+      "defaultFee": 2000
+    },
+    {
+      "id": "fee-1",
+      "name": "Nebulizer treatment",
+      "defaultFee": 800
+    },
+    {
+      "id": "fee-5",
+      "name": "Other services",
+      "defaultFee": 1000
+    },
+    {
+      "id": "fee-387",
+      "name": "axdfgj",
+      "defaultFee": 1000
+    },
+    {
+      "id": "fee-888",
+      "name": "uuui",
+      "defaultFee": 1000
+    }
+  ]
+}

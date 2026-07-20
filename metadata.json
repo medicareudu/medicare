@@ -1,0 +1,6 @@
+{
+  "name": "MediCare System",
+  "description": "Comprehensive clinic and pharmacy management system, streamlining patient billing, inventory management, staff tracking, and low-stock notifications.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,1801 @@
+{
+  "medicines": [
+    {
+      "_uid": 31,
+      "id": "MED-289",
+      "name": "Amoxicillin 500mg",
+      "category": "Antibiotic",
+      "qty": 180,
+      "expiry": "2026-07-30",
+      "supplier": "MedPlus",
+      "price": 20,
+      "minThreshold": 50
+    },
+    {
+      "_uid": 32,
+      "id": "MED-003",
+      "name": "Metformin 850mg",
+      "category": "Antidiabetic",
+      "qty": 600,
+      "expiry": "2027-03-10",
+      "supplier": "MediSupply",
+      "price": 15.4,
+      "minThreshold": 50
+    },
+    {
+      "_uid": 33,
+      "id": "MED-004",
+      "name": "Atorvastatin 10mg",
+      "category": "Statin",
+      "qty": 260,
+      "expiry": "2026-06-30",
+      "supplier": "MediSupply",
+      "price": 35,
+      "minThreshold": 50
+    },
+    {
+      "_uid": 34,
+      "id": "MED-005",
+      "name": "Omeprazole 20mg",
+      "category": "Antacid",
+      "qty": 800,
+      "expiry": "2026-09-05",
+      "supplier": "MediSupply",
+      "price": 18.2,
+      "minThreshold": 50
+    },
+    {
+      "_uid": 35,
+      "id": "MED-006",
+      "name": "Amlodipine 5mg",
+      "category": "Antihypertensive",
+      "qty": 500,
+      "expiry": "2026-11-12",
+      "supplier": "MediSupply",
+      "price": 22.5,
+      "minThreshold": 50
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "SUP-003",
+      "name": "MedPlus",
+      "contactPerson": "Nisha Perera",
+      "phone": "076-9876543",
+      "email": "nisha@medplus.lk",
+      "status": "Active"
+    },
+    {
+      "id": "SUP-002",
+      "name": "MediSupply",
+      "contactPerson": "Anura Bandara",
+      "phone": "071-7654321",
+      "email": "anura@medisupply.lk",
+      "status": "Active"
+    },
+    {
+      "id": "SUP-001",
+      "name": "PharmaCo",
+      "contactPerson": "Saman Kumara",
+      "phone": "077-1234567",
+      "email": "saman@pharmaco.com",
+      "status": "Active"
+    }
+  ],
+  "staff": [
+    {
+      "id": "STF-001",
+      "name": "Admin",
+      "username": "admin",
+      "email": "admin@medicare.com",
+      "role": "Admin",
+      "status": "Active"
+    },
+    {
+      "id": "STF-876",
+      "name": "Oshidi Yapa",
+      "username": "oshidi",
+      "email": "ishmithabimsarani@gmail.com",
+      "role": "Staff",
+      "status": "Active"
+    },
+    {
+      "id": "STF-132",
+      "name": "Shamla Noufer",
+      "username": "shamla",
+      "email": "shamlanoufer@gmail.com",
+      "role": "Admin",
+      "status": "Active"
+    },
+    {
+      "id": "STF-002",
+      "name": "Staff",
+      "username": "staff",
+      "email": "staff@medicare.com",
+      "role": "Staff",
+      "status": "Active"
+    }
+  ],
+  "pharmacyInfo": {
+    "id": 1,
+    "name": "Medicare Udunuwara",
+    "address": "123 Hospital Road, Kandy, Sri Lanka",
+    "phone": "0770373361",
+    "website": "medicareclinic.lk",
+    "defaultConsultationFee": 1000,
+    "lowStockThreshold": 50,
+    "enableQrCode": true,
+    "taxRate": 0,
+    "expiryReminderDays": 30,
+    "emailNotifications": true,
+    "systemAlerts": true,
+    "tokenPrefix": "TKN",
+    "currency": "LKR",
+    "dateFormat": "YYYY-MM-DD HH:mm",
+    "timeZone": "Asia/Colombo",
+    "autoBackup": true,
+    "autoBackupFrequency": "Daily",
+    "printerPaperSize": "80mm",
+    "printerMargins": "0.5in",
+    "sessionTimeout": 30,
+    "enable2Fa": false
+  },
+  "branches": [
+    {
+      "id": "BR-001",
+      "name": "MediCare Main Pharmacy",
+      "address": "123 Hospital Road, Kandy",
+      "phone": "081-234-5678",
+      "isMain": true
+    },
+    {
+      "id": "BR-002",
+      "name": "MediCare Town Branch",
+      "address": "45 Colombo Street, Kandy",
+      "phone": "081-234-9988",
+      "isMain": false
+    },
+    {
+      "id": "BR-703",
+      "name": "Town Square",
+      "address": "kiribathkumbura, Kandy",
+      "phone": "0771546268",
+      "isMain": false
+    }
+  ],
+  "prescriptions": [
+    {
+      "token": "TKN-00134",
+      "patientName": "Walk-in",
+      "patientNo": "REQ-2026-007",
+      "doctor": "Shamla Noufer",
+      "date": "2026-07-19 15:40",
+      "medicines": [],
+      "consultationFee": 1000,
+      "additionalCharges": [
+        {
+          "fee": 1000,
+          "name": "ECG Service",
+          "checked": true
+        }
+      ],
+      "totalAmount": 2000,
+      "status": "Pending"
+    },
+    {
+      "token": "TKN-00133",
+      "patientName": "Walk-in",
+      "patientNo": "REQ-2026-006",
+      "doctor": "Admin",
+      "date": "2026-07-19 15:38",
+      "medicines": [],
+      "consultationFee": 1000,
+      "additionalCharges": [
+        {
+          "fee": 1000,
+          "name": "ECG Service",
+          "checked": true
+        }
+      ],
+      "totalAmount": 2000,
+      "status": "Pending"
+    },
+    {
+      "token": "TKN-00132",
+      "patientName": "Shamla Noufer",
+      "patientNo": "REQ-2026-005",
+      "doctor": "Admin",
+      "date": "2026-07-19 15:33",
+      "medicines": [
+        {
+          "qty": 10,
+          "name": "Amoxicillin 500mg",
+          "unit": "tablets",
+          "price": 20,
+          "medicineId": "MED-289"
+        }
+      ],
+      "consultationFee": 1000,
+      "additionalCharges": [
+        {
+          "fee": 1000,
+          "name": "ECG Service",
+          "checked": true
+        },
+        {
+          "fee": 1000,
+          "name": "Medical Procedure",
+          "checked": true
+        },
+        {
+          "fee": 1000,
+          "name": "Other services",
+          "checked": true
+        }
+      ],
+      "totalAmount": 4200,
+      "status": "Pending"
+    },
+    {
+      "token": "TKN-00131",
+      "patientName": "sfghjk",
+      "patientNo": "REQ-2026-004",
+      "doctor": "Admin",
+      "date": "2026-07-19 15:04",
+      "medicines": [
+        {
+          "qty": 10,
+          "name": "Amoxicillin 500mg",
+          "unit": "tablets",
+          "price": 20,
+          "medicineId": "MED-289"
+        }
+      ],
+      "consultationFee": 900,
+      "additionalCharges": [
+        {
+          "fee": 1200,
+          "name": "ECG service",
+          "checked": true
+        },
+        {
+          "fee": 1800,
+          "name": "EEG service",
+          "checked": true
+        },
+        {
+          "fee": 2000,
+          "name": "Medical procedure",
+          "checked": true
+        },
+        {
+          "fee": 800,
+          "name": "Nebulizer treatment",
+          "checked": true
+        }
+      ],
+      "totalAmount": 6900,
+      "status": "Completed",
+      "issuedAt": "2026-07-19 20:58",
+      "issuedBy": "Shamla Noufer"
+    },
+    {
+      "token": "TKN-00130",
+      "patientName": "sfghjk",
+      "patientNo": "REQ-2026-003",
+      "doctor": "Admin",
+      "date": "2026-07-19 15:04",
+      "medicines": [
+        {
+          "qty": 10,
+          "name": "Amoxicillin 500mg",
+          "unit": "tablets",
+          "price": 20,
+          "medicineId": "MED-289"
+        }
+      ],
+      "consultationFee": 900,
+      "additionalCharges": [
+        {
+          "fee": 1200,
+          "name": "ECG service",
+          "checked": true
+        },
+        {
+          "fee": 1800,
+          "name": "EEG service",
+          "checked": true
+        },
+        {
+          "fee": 2000,
+          "name": "Medical procedure",
+          "checked": true
+        },
+        {
+          "fee": 800,
+          "name": "Nebulizer treatment",
+          "checked": true
+        }
+      ],
+      "totalAmount": 6900,
+      "status": "Completed",
+      "issuedAt": "2026-07-19 20:58",
+      "issuedBy": "Shamla Noufer"
+    },
+    {
+      "token": "TKN-00129",
+      "patientName": "ASDFTYUIO",
+      "patientNo": "REQ-2026-002",
+      "doctor": "Admin",
+      "date": "2026-07-19 07:53",
+      "medicines": [
+        {
+          "qty": 400,
+          "name": "Amoxicillin 500mg",
+          "unit": "tablets",
+          "price": 40,
+          "medicineId": "MED-002"
+        }
+      ],
+      "consultationFee": 900,
+      "additionalCharges": [
+        {
+          "fee": 1200,
+          "name": "ECG service",
+          "checked": true
+        }
+      ],
+      "totalAmount": 18100,
+      "status": "Completed",
+      "issuedAt": "2026-07-19 13:24",
+      "issuedBy": "Staff"
+    },
+    {
+      "token": "TKN-00128",
+      "patientName": "wer",
+      "patientNo": "REQ-2026-001",
+      "doctor": "Admin",
+      "date": "2026-07-19 07:39",
+      "medicines": [
+        {
+          "qty": 40,
+          "name": "Atorvastatin 10mg",
+          "unit": "tablets",
+          "price": 35,
+          "medicineId": "MED-004"
+        }
+      ],
+      "consultationFee": 900,
+      "additionalCharges": [
+        {
+          "fee": 1200,
+          "name": "ECG service",
+          "checked": true
+        }
+      ],
+      "totalAmount": 3500,
+      "status": "Completed",
+      "issuedAt": "2026-07-19 13:21",
+      "issuedBy": "Staff"
+    }
+  ],
+  "history": [
+    {
+      "id": "HIST-45616",
+      "time": "2026-07-19 21:11",
+      "type": "Staff",
+      "reference": "STF-132",
+      "detail": "User Shamla Noufer logged out",
+      "user": "Shamla Noufer"
+    },
+    {
+      "id": "HIST-76102",
+      "time": "2026-07-19 21:10",
+      "type": "Request",
+      "reference": "TKN-00134",
+      "detail": "Medicine request created — 0 medicine(s), ref REQ-2026-007. Tests: ECG Service. Token TKN-00134 sent to Staff dashboard.",
+      "user": "Shamla Noufer"
+    },
+    {
+      "id": "HIST-17274",
+      "time": "2026-07-19 21:10",
+      "type": "Staff",
+      "reference": "STF-132",
+      "detail": "User Shamla Noufer logged in successfully",
+      "user": "Shamla Noufer"
+    },
+    {
+      "id": "HIST-98138",
+      "time": "2026-07-19 21:10",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-65660",
+      "time": "2026-07-19 21:09",
+      "type": "Staff",
+      "reference": "STF-132",
+      "detail": "Updated staff profile for: Shamla Noufer",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-20322",
+      "time": "2026-07-19 21:08",
+      "type": "Request",
+      "reference": "TKN-00133",
+      "detail": "Medicine request created — 0 medicine(s), ref REQ-2026-006. Tests: ECG Service. Token TKN-00133 sent to Staff dashboard.",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-49607",
+      "time": "2026-07-19 21:08",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-64989",
+      "time": "2026-07-19 21:03",
+      "type": "Request",
+      "reference": "TKN-00132",
+      "detail": "Medicine request created — 1 medicine(s), ref REQ-2026-005. Tests: ECG Service, Medical Procedure, Other services. Token TKN-00132 sent to Staff dashboard.",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-02340",
+      "time": "2026-07-19 21:01",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-16204",
+      "time": "2026-07-19 21:01",
+      "type": "Staff",
+      "reference": "STF-132",
+      "detail": "User Shamla Noufer logged out",
+      "user": "Shamla Noufer"
+    },
+    {
+      "id": "HIST-04869",
+      "time": "2026-07-19 20:58",
+      "type": "Request",
+      "reference": "TKN-00130",
+      "detail": "Request TKN-00130 marked as Completed by Shamla Noufer.",
+      "user": "Shamla Noufer"
+    },
+    {
+      "id": "HIST-53763",
+      "time": "2026-07-19 20:58",
+      "type": "Issued",
+      "reference": "TKN-00130",
+      "detail": "Medicines issued for request TKN-00130. Items: Amoxicillin 500mg (x10). Stock deducted from inventory.",
+      "user": "Shamla Noufer"
+    },
+    {
+      "id": "HIST-11045",
+      "time": "2026-07-19 20:58",
+      "type": "Request",
+      "reference": "TKN-00131",
+      "detail": "Request TKN-00131 marked as Completed by Shamla Noufer.",
+      "user": "Shamla Noufer"
+    },
+    {
+      "id": "HIST-36005",
+      "time": "2026-07-19 20:58",
+      "type": "Issued",
+      "reference": "TKN-00131",
+      "detail": "Medicines issued for request TKN-00131. Items: Amoxicillin 500mg (x10). Stock deducted from inventory.",
+      "user": "Shamla Noufer"
+    },
+    {
+      "id": "HIST-98628",
+      "time": "2026-07-19 20:57",
+      "type": "Staff",
+      "reference": "STF-132",
+      "detail": "User Shamla Noufer logged in successfully",
+      "user": "Shamla Noufer"
+    },
+    {
+      "id": "HIST-95745",
+      "time": "2026-07-19 20:57",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-54932",
+      "time": "2026-07-19 20:57",
+      "type": "Staff",
+      "reference": "STF-132",
+      "detail": "Added staff member: Shamla Noufer (Staff)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-90613",
+      "time": "2026-07-19 20:52",
+      "type": "Stock",
+      "reference": "MED-007",
+      "detail": "Deleted medicine record: qwertyu",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-04105",
+      "time": "2026-07-19 20:52",
+      "type": "Supplier",
+      "reference": "SUP-502",
+      "detail": "Removed supplier: sdfg",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-41481",
+      "time": "2026-07-19 20:50",
+      "type": "Settings",
+      "reference": "fee-5",
+      "detail": "Deleted service fee type: Other services",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-69651",
+      "time": "2026-07-19 20:50",
+      "type": "Settings",
+      "reference": "fee-1",
+      "detail": "Deleted service fee type: Nebulizer treatment",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-90429",
+      "time": "2026-07-19 20:50",
+      "type": "Settings",
+      "reference": "fee-955",
+      "detail": "Added additional service fee type: Other services",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-51171",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-333",
+      "detail": "Added additional service fee type: Nebulizer treatment",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-01003",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Deleted service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-31671",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-231",
+      "detail": "Added additional service fee type: Medical Procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-60133",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-28505",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-04338",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-97808",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-05780",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-34762",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-09039",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-90101",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-87628",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-16053",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-50609",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-51547",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-21903",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-92821",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-05223",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-38032",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-36161",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-23198",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-30764",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-52296",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-99967",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-82412",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-75212",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-94281",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-48865",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-31108",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-38581",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-33118",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-40326",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-58992",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-80219",
+      "time": "2026-07-19 20:49",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-83107",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-49675",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-77823",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-81114",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-47948",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-76062",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-78459",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Deleted service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-76126",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-87213",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-16307",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-32146",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-95552",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-09556",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-13448",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-267",
+      "detail": "Added additional service fee type: ECG Service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-24933",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-72662",
+      "time": "2026-07-19 20:48",
+      "type": "Settings",
+      "reference": "fee-4",
+      "detail": "Updated service fee type: Medical procedure",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-99176",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-03169",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-56745",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-50315",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-36651",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-71647",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-87311",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-07619",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-39814",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-00799",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-10828",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-62497",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-23048",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-42038",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-83084",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-51653",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-39517",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-23520",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-54173",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-69269",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-89555",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-00329",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-25963",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-80250",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-30139",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-10945",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-46548",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-12641",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-30889",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-75410",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-76723",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-21145",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-84161",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-83449",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-06860",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-24902",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-17200",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-3",
+      "detail": "Updated service fee type: EEG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-94591",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-888",
+      "detail": "Deleted service fee type: uuui",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-96771",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-387",
+      "detail": "Deleted service fee type: axdfgj",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-68768",
+      "time": "2026-07-19 20:47",
+      "type": "Settings",
+      "reference": "fee-2",
+      "detail": "Deleted service fee type: ECG service",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-31294",
+      "time": "2026-07-19 20:43",
+      "type": "Settings",
+      "reference": "INCOME_DOWNLOAD",
+      "detail": "Downloaded Income Ledger Excel Report",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-56083",
+      "time": "2026-07-19 20:42",
+      "type": "Settings",
+      "reference": "PHARMACY_INFO_UPDATE",
+      "detail": "Updated pharmacy settings & credentials",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-18246",
+      "time": "2026-07-19 20:34",
+      "type": "Request",
+      "reference": "TKN-00131",
+      "detail": "Medicine request created — 1 medicine(s), ref REQ-2026-004. Tests: ECG service, EEG service, Medical procedure, Nebulizer treatment. Token TKN-00131 sent to Staff dashboard.",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-12614",
+      "time": "2026-07-19 20:34",
+      "type": "Request",
+      "reference": "TKN-00130",
+      "detail": "Medicine request created — 1 medicine(s), ref REQ-2026-003. Tests: ECG service, EEG service, Medical procedure, Nebulizer treatment. Token TKN-00130 sent to Staff dashboard.",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-24957",
+      "time": "2026-07-19 20:29",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-03872",
+      "time": "2026-07-19 20:16",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-93982",
+      "time": "2026-07-19 19:51",
+      "type": "Settings",
+      "reference": "PHARMACY_INFO_UPDATE",
+      "detail": "Updated pharmacy settings & credentials",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-36914",
+      "time": "2026-07-19 19:28",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-79065",
+      "time": "2026-07-19 19:23",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-82124",
+      "time": "2026-07-19 19:22",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-71207",
+      "time": "2026-07-19 19:22",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-09660",
+      "time": "2026-07-19 19:21",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-31981",
+      "time": "2026-07-19 13:59",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-33709",
+      "time": "2026-07-19 13:53",
+      "type": "Stock",
+      "reference": "MED-289",
+      "detail": "Restocked medicine via manual add: Amoxicillin 500mg (+100 units, total: 200)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-13969",
+      "time": "2026-07-19 13:49",
+      "type": "Stock",
+      "reference": "MED-045",
+      "detail": "Deleted medicine record: Amoxicillin",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-24122",
+      "time": "2026-07-19 13:48",
+      "type": "Stock",
+      "reference": "MED-078",
+      "detail": "Restocked medicine via manual add: Amoxicillin 500mg (+100 units, total: 100)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-30167",
+      "time": "2026-07-19 13:47",
+      "type": "Stock",
+      "reference": "MED-713",
+      "detail": "Deleted medicine record: Amoxicillin 500mg",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-94099",
+      "time": "2026-07-19 13:46",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-03504",
+      "time": "2026-07-19 13:27",
+      "type": "Stock",
+      "reference": "MED-713",
+      "detail": "Added new medicine: Amoxicillin 500mg (100 units)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-83743",
+      "time": "2026-07-19 13:26",
+      "type": "Stock",
+      "reference": "MED-045",
+      "detail": "Added new medicine: Amoxicillin (100 units)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-65298",
+      "time": "2026-07-19 13:25",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-45543",
+      "time": "2026-07-19 13:24",
+      "type": "Staff",
+      "reference": "STF-002",
+      "detail": "User Staff logged out",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-62661",
+      "time": "2026-07-19 13:24",
+      "type": "Alert",
+      "reference": "MED-002",
+      "detail": "Low stock alert — Amoxicillin 500mg is at 0 units (threshold: 50). Admin notified to reorder.",
+      "user": "System"
+    },
+    {
+      "id": "HIST-97527",
+      "time": "2026-07-19 13:24",
+      "type": "Request",
+      "reference": "TKN-00129",
+      "detail": "Request TKN-00129 marked as Completed by Staff.",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-11472",
+      "time": "2026-07-19 13:24",
+      "type": "Issued",
+      "reference": "TKN-00129",
+      "detail": "Medicines issued for request TKN-00129. Items: Amoxicillin 500mg (x400). Stock deducted from inventory.",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-20649",
+      "time": "2026-07-19 13:24",
+      "type": "Staff",
+      "reference": "STF-002",
+      "detail": "User Staff logged in successfully",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-09968",
+      "time": "2026-07-19 13:23",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-94920",
+      "time": "2026-07-19 13:23",
+      "type": "Request",
+      "reference": "TKN-00129",
+      "detail": "Medicine request created — 1 medicine(s), ref REQ-2026-002. Tests: ECG service. Token TKN-00129 sent to Staff dashboard.",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-29729",
+      "time": "2026-07-19 13:21",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-69112",
+      "time": "2026-07-19 13:21",
+      "type": "Staff",
+      "reference": "STF-002",
+      "detail": "User Staff logged out",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-71324",
+      "time": "2026-07-19 13:21",
+      "type": "Request",
+      "reference": "TKN-00128",
+      "detail": "Request TKN-00128 marked as Completed by Staff.",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-84735",
+      "time": "2026-07-19 13:21",
+      "type": "Issued",
+      "reference": "TKN-00128",
+      "detail": "Medicines issued for request TKN-00128. Items: Atorvastatin 10mg (x40). Stock deducted from inventory.",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-47912",
+      "time": "2026-07-19 13:20",
+      "type": "Staff",
+      "reference": "STF-002",
+      "detail": "User Staff logged in successfully",
+      "user": "Staff"
+    },
+    {
+      "id": "HIST-58077",
+      "time": "2026-07-19 13:20",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-21073",
+      "time": "2026-07-19 13:20",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Updated staff profile for: Oshidi Yapa",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-88287",
+      "time": "2026-07-19 13:20",
+      "type": "Staff",
+      "reference": "STF-002",
+      "detail": "Updated staff profile for: Staff",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-86975",
+      "time": "2026-07-19 13:19",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-55764",
+      "time": "2026-07-19 13:19",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-15198",
+      "time": "2026-07-19 13:10",
+      "type": "Request",
+      "reference": "TKN-00128",
+      "detail": "Medicine request created — 1 medicine(s), ref REQ-2026-001. Tests: ECG service. Token TKN-00128 sent to Staff dashboard.",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-76616",
+      "time": "2026-07-19 13:09",
+      "type": "Import",
+      "reference": "IMPORT-53627",
+      "detail": "6 medicine records imported from MediSupply Excel file (0 new, 6 stock merged, 0 skipped)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-68012",
+      "time": "2026-07-19 13:09",
+      "type": "Import",
+      "reference": "IMPORT-47978",
+      "detail": "6 medicine records imported from MediSupply Excel file (6 new, 0 stock merged, 0 skipped)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-61770",
+      "time": "2026-07-19 13:08",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-12638",
+      "time": "2026-07-19 13:08",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "User Oshidi Yapa logged out",
+      "user": "Oshidi Yapa"
+    },
+    {
+      "id": "HIST-68337",
+      "time": "2026-07-19 13:05",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "User Oshidi Yapa logged in successfully",
+      "user": "Oshidi Yapa"
+    },
+    {
+      "id": "HIST-16164",
+      "time": "2026-07-19 13:05",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Password recovery email sent to ishmithabimsarani@gmail.com for user Oshidi Yapa. Temp password: medicare4257. ",
+      "user": "System Recovery"
+    },
+    {
+      "id": "HIST-63317",
+      "time": "2026-07-19 12:35",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Password recovery email sent to ishmithabimsarani@gmail.com for user Oshidi Yapa. Temp password: medicare4335. Preview URL: https://ethereal.email/message/alx3PUMohzqafI2jalx3QfraIFk9OmezAAAAAQXiPYBPb2x3oAMY-HvaPEo",
+      "user": "System Recovery"
+    },
+    {
+      "id": "HIST-71500",
+      "time": "2026-07-19 12:28",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Password recovery email sent to ishmithabimsarani@gmail.com for user Oshidi Yapa. Temp password: medicare5583",
+      "user": "System Recovery"
+    },
+    {
+      "id": "HIST-69633",
+      "time": "2026-07-19 12:25",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "User Oshidi Yapa logged out",
+      "user": "Oshidi Yapa"
+    },
+    {
+      "id": "HIST-62374",
+      "time": "2026-07-19 12:25",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "User Oshidi Yapa logged in successfully",
+      "user": "Oshidi Yapa"
+    },
+    {
+      "id": "HIST-67622",
+      "time": "2026-07-19 12:25",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-89094",
+      "time": "2026-07-19 12:24",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Updated staff profile for: Oshidi Yapa",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-93831",
+      "time": "2026-07-19 12:24",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-38605",
+      "time": "2026-07-19 11:56",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Simulated password reset email sent to ishmithabimsarani@gmail.com for user Oshidi Yapa. Temp password: medicare9030",
+      "user": "System Recovery"
+    },
+    {
+      "id": "HIST-05920",
+      "time": "2026-07-19 11:54",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Simulated password reset email sent to ishmithabimsarani@gmail.com for user Oshidi Yapa. Temp password: medicare3914",
+      "user": "System Recovery"
+    },
+    {
+      "id": "HIST-84634",
+      "time": "2026-07-19 11:54",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "User Oshidi Yapa logged out",
+      "user": "Oshidi Yapa"
+    },
+    {
+      "id": "HIST-64266",
+      "time": "2026-07-19 11:53",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "User Oshidi Yapa logged in successfully",
+      "user": "Oshidi Yapa"
+    },
+    {
+      "id": "HIST-94504",
+      "time": "2026-07-19 11:53",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged out",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-80887",
+      "time": "2026-07-19 11:53",
+      "type": "Staff",
+      "reference": "STF-876",
+      "detail": "Added staff member: Oshidi Yapa (Staff)",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-32499",
+      "time": "2026-07-19 11:52",
+      "type": "Staff",
+      "reference": "STF-001",
+      "detail": "User Admin logged in successfully",
+      "user": "Admin"
+    },
+    {
+      "id": "HIST-43521",
+      "time": "2026-07-19 11:52",
+      "type": "Staff",
+      "reference": "STF-002",
+      "detail": "Simulated password reset email sent to staff@medicare.com for user Staff. Temp password: medicare5376",
+      "user": "System Recovery"
+    },
+    {
+      "id": "HIST-00001",
+      "time": "2026-07-19 06:16",
+      "type": "Settings",
+      "reference": "SYSTEM_INIT",
+      "detail": "System initialized. Medicine inventory is empty — use Excel Import to load supplier records.",
+      "user": "System"
+    }
+  ],
+  "serviceFees": [
+    {
+      "id": "fee-267",
+      "name": "ECG Service",
+      "defaultFee": 1000
+    },
+    {
+      "id": "fee-231",
+      "name": "Medical Procedure",
+      "defaultFee": 1000
+    },
+    {
+      "id": "fee-333",
+      "name": "Nebulizer treatment",
+      "defaultFee": 500
+    },
+    {
+      "id": "fee-955",
+      "name": "Other services",
+      "defaultFee": 1000
+    }
+  ],
+  "backupMeta": {
+    "exportedAt": "2026-07-19T18:30:01.977Z",
+    "exportedBy": "Auto Scheduler",
+    "recordsCount": {
+      "medicines": 5,
+      "suppliers": 3,
+      "prescriptions": 7,
+      "staff": 4,
+      "branches": 3
+    }
+  }
+}
