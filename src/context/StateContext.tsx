@@ -22,7 +22,6 @@ import {
   prescriptionsApi,
   historyApi,
   settingsApi,
-  getAccessToken,
   getErrorMessage,
 } from '../api/client';
 
@@ -123,11 +122,6 @@ export const StateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     const init = async () => {
-      const token = getAccessToken();
-      if (!token) {
-        setIsInitialized(true);
-        return;
-      }
       setIsLoading(true);
       try {
         const user = await authApi.me();

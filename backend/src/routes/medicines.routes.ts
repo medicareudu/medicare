@@ -171,9 +171,10 @@ router.post(
     let skipCount = 0;
 
     const medicines = await prisma.$transaction(async (tx) => {
+      const allMeds = await tx.medicine.findMany();
       for (const item of items) {
         const medicineId = item.id.toUpperCase().trim();
-        const existing = await findExistingMedicine(tx, medicineId, item.name);
+        const existing = await findExistingMedicine(tx, medicineId, item.name, allMeds);
 
         if (existing) {
           if (item.action === 'skip') {
@@ -212,6 +213,8 @@ router.post(
       }
 
       return tx.medicine.findMany({ orderBy: { uid: 'asc' } });
+    }, {
+      timeout: 30000 // 30 seconds
     });
 
     const supplierName = items[0]?.supplier || 'supplier';

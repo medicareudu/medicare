@@ -15,44 +15,16 @@ const API_BASE = import.meta.env.VITE_API_URL || '/api';
 export const api = axios.create({
   baseURL: API_BASE,
   headers: { 'Content-Type': 'application/json' },
-});
-
-const TOKEN_KEY = 'medicare_access_token';
-const REFRESH_KEY = 'medicare_refresh_token';
-
-export function getAccessToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY);
-}
-
-export function getRefreshToken(): string | null {
-  return localStorage.getItem(REFRESH_KEY);
-}
-
-export function setTokens(accessToken: string, refreshToken: string) {
-  localStorage.setItem(TOKEN_KEY, accessToken);
-  localStorage.setItem(REFRESH_KEY, refreshToken);
-}
-
-export function clearTokens() {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(REFRESH_KEY);
-}
-
-api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = getAccessToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
+  withCredentials: true,
 });
 
 let isRefreshing = false;
-let failedQueue: Array<{ resolve: (token: string) => void; reject: (err: unknown) => void }> = [];
+let failedQueue: Array<{ resolve: () => void; reject: (err: unknown) => void }> = [];
 
-function processQueue(error: unknown, token: string | null = null) {
+function processQueue(error: unknown) {
   failedQueue.forEach((prom) => {
     if (error) prom.reject(error);
-    else if (token) prom.resolve(token);
+    else prom.resolve();
   });
   failedQueue = [];
 }
@@ -62,20 +34,11 @@ api.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      const refreshToken = getRefreshToken();
-      if (!refreshToken) {
-        clearTokens();
-        return Promise.reject(error);
-      }
-
+    if (error.response?.status === 401 && !originalRequest._retry && originalRequest.url !== '/auth/login' && originalRequest.url !== '/auth/refresh') {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({
-            resolve: (token: string) => {
-              originalRequest.headers.Authorization = `Bearer ${token}`;
-              resolve(api(originalRequest));
-            },
+            resolve: () => resolve(api(originalRequest)),
             reject,
           });
         });
@@ -85,14 +48,11 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { data } = await axios.post(`${API_BASE}/auth/refresh`, { refreshToken });
-        setTokens(data.accessToken, refreshToken);
-        processQueue(null, data.accessToken);
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+        await axios.post(`${API_BASE}/auth/refresh`, {}, { withCredentials: true });
+        processQueue(null);
         return api(originalRequest);
       } catch (refreshError) {
-        processQueue(refreshError, null);
-        clearTokens();
+        processQueue(refreshError);
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
@@ -117,16 +77,10 @@ export interface AppData {
 export const authApi = {
   login: async (username: string, password: string) => {
     const { data } = await api.post('/auth/login', { username, password });
-    setTokens(data.accessToken, data.refreshToken);
     return data.user as Staff;
   },
   logout: async () => {
-    const refreshToken = getRefreshToken();
-    try {
-      await api.post('/auth/logout', { refreshToken });
-    } finally {
-      clearTokens();
-    }
+    await api.post('/auth/logout');
   },
   me: async () => {
     const { data } = await api.get('/auth/me');

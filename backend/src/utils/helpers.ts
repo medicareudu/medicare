@@ -26,7 +26,8 @@ export async function addHistoryLog(
 export async function findExistingMedicine(
   tx: any,
   medicineId: string,
-  name: string
+  name: string,
+  cachedMeds?: any[]
 ) {
   // 1. Match by Unique ID
   const existingById = await tx.medicine.findUnique({
@@ -41,7 +42,7 @@ export async function findExistingMedicine(
   if (existingByName) return existingByName;
 
   // 3. Fallback: Fuzzy/substring name comparison
-  const allMeds = await tx.medicine.findMany();
+  const allMeds = cachedMeds || await tx.medicine.findMany();
   const cleanInput = name.trim().toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
   const prefixInput = cleanInput.substring(0, 4);
 

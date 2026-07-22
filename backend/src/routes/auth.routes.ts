@@ -57,9 +57,21 @@ router.post(
 
     await addHistoryLog('Staff', user.staffId, `User ${user.name} logged in successfully`, user.name);
 
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 15 * 60 * 1000 // 15 minutes
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
     res.json({
-      accessToken,
-      refreshToken,
       user: mapStaff(user),
     });
   })
@@ -68,7 +80,12 @@ router.post(
 router.post(
   '/refresh',
   asyncHandler(async (req, res) => {
-    const { refreshToken } = z.object({ refreshToken: z.string() }).parse(req.body);
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) {
+      res.status(401).json({ error: 'No refresh token' });
+      return;
+    }
+
     const stored = await prisma.refreshToken.findUnique({ where: { token: refreshToken } });
 
     if (!stored || stored.expiresAt < new Date()) {
@@ -90,8 +107,14 @@ router.post(
       name: user.name,
     };
 
+    res.cookie('accessToken', signAccessToken(payload), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 15 * 60 * 1000 // 15 minutes
+    });
+
     res.json({
-      accessToken: signAccessToken(payload),
       user: mapStaff(user),
     });
   })
@@ -101,13 +124,15 @@ router.post(
   '/logout',
   authenticate,
   asyncHandler(async (req, res) => {
-    const { refreshToken } = req.body as { refreshToken?: string };
+    const refreshToken = req.cookies?.refreshToken;
     if (refreshToken) {
       await prisma.refreshToken.deleteMany({ where: { token: refreshToken } });
     }
     if (req.user) {
       await addHistoryLog('Staff', req.user.staffId, `User ${req.user.name} logged out`, req.user.name);
     }
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
     res.json({ message: 'Logged out' });
   })
 );

@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
 import { env } from './config/env.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/auth.routes.js';
@@ -19,13 +20,14 @@ import reportsRoutes from './routes/reports.routes.js';
 export const app = express();
 
 app.use(helmet());
+app.use(cookieParser());
 app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
       const allowed =
         origin === env.FRONTEND_URL ||
-        (env.NODE_ENV === 'development' && /^http:\/\/localhost:\d+$/.test(origin));
+        ((env.NODE_ENV === 'development' || env.NODE_ENV === 'test') && /^http:\/\/localhost:\d+$/.test(origin));
       callback(null, allowed);
     },
     credentials: true,

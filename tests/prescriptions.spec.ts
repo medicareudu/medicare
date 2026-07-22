@@ -3,6 +3,8 @@ import { test, expect } from '@playwright/test';
 test.describe('Medicine Requests & Dispensing Flow', () => {
   // Helper to login before tests
   test.beforeEach(async ({ page }) => {
+    page.on('console', msg => console.log(`[Browser] ${msg.type()}: ${msg.text()}`));
+    page.on('pageerror', error => console.error(`[Browser Error] ${error.message}`));
     await page.goto('/');
     await page.getByPlaceholder('Enter your username').fill('admin');
     await page.locator('input[type="password"]').fill('admin123');

@@ -10,6 +10,9 @@ test.describe('Inventory & Stock Management', () => {
   });
 
   test('should view stock overview and add new medicine', async ({ page }) => {
+    page.on('console', msg => console.log(`[Browser] ${msg.type()}: ${msg.text()}`));
+    page.on('pageerror', error => console.error(`[Browser Error] ${error.message}`));
+    
     // 1. Navigate to Stock Overview tab
     await page.getByRole('button', { name: 'Stock Overview' }).click();
     await expect(page.getByRole('heading', { name: 'Real-time Stock Overview' })).toBeVisible();

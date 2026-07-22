@@ -35,13 +35,12 @@ export function verifyRefreshToken(token: string): { userId: string } {
 }
 
 export async function authenticate(req: Request, res: Response, next: NextFunction) {
-  const header = req.headers.authorization;
-  if (!header?.startsWith('Bearer ')) {
+  const token = req.cookies?.accessToken;
+  if (!token) {
     return res.status(401).json({ error: 'Authentication required' });
   }
 
   try {
-    const token = header.slice(7);
     const payload = verifyAccessToken(token);
     const user = await prisma.user.findUnique({ where: { id: payload.userId } });
     if (!user || user.status !== 'Active') {

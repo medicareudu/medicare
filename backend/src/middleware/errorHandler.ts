@@ -8,7 +8,12 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
   }
 
   logger.error(err);
-  const message = err instanceof Error ? err.message : 'Internal server error';
+  
+  const isProduction = process.env.NODE_ENV === 'production';
+  const message = err instanceof Error 
+    ? (isProduction ? 'Internal server error' : err.message) 
+    : 'Internal server error';
+    
   res.status(500).json({ error: message });
 }
 

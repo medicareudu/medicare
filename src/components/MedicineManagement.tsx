@@ -368,15 +368,6 @@ export const MedicineManagement: React.FC = () => {
       
       if (matched) {
         mapping[field as keyof typeof mapping] = matched;
-      } else {
-        // Logical fallbacks based on indices
-        if (field === 'id' && headers[0]) mapping.id = headers[0];
-        else if (field === 'name' && headers[1]) mapping.name = headers[1];
-        else if (field === 'category' && headers[2]) mapping.category = headers[2];
-        else if (field === 'qty' && headers[3]) mapping.qty = headers[3];
-        else if (field === 'expiry' && headers[4]) mapping.expiry = headers[4];
-        else if (field === 'supplier' && headers[5]) mapping.supplier = headers[5];
-        else if (field === 'price' && headers[6]) mapping.price = headers[6];
       }
     });
 
@@ -485,13 +476,15 @@ export const MedicineManagement: React.FC = () => {
         
         // Convert to JSON row array
         const jsonRows: any[] = XLSX.utils.sheet_to_json(sheet, { defval: '' });
-        if (jsonRows.length === 0) {
+        const nonEmptyRows = jsonRows.filter(row => Object.values(row).some(val => String(val).trim() !== ''));
+        
+        if (nonEmptyRows.length === 0) {
           throw new Error('No records or headers found in this sheet.');
         }
 
-        const headers = Object.keys(jsonRows[0] || {});
+        const headers = Object.keys(nonEmptyRows[0] || {});
         setRawHeaders(headers);
-        setRawRows(jsonRows);
+        setRawRows(nonEmptyRows);
         
         const initialMapping = autoMapColumns(headers);
         setColumnMapping(initialMapping);
@@ -550,7 +543,11 @@ export const MedicineManagement: React.FC = () => {
       // Simple parse of CSV lines
       const parsedLines = lines.map(line => {
         return line.split(',').map(cell => cell.trim().replace(/^["']|["']$/g, ''));
-      });
+      }).filter(row => row.some(cell => cell !== ''));
+
+      if (parsedLines.length === 0) {
+        throw new Error('No data rows detected after filtering empty lines.');
+      }
 
       const firstRow = parsedLines[0];
       // Check if first line contains numeric cells, if so, we treat headers as Column 1, Column 2, etc.
@@ -634,7 +631,10 @@ export const MedicineManagement: React.FC = () => {
         name: r.name,
         errors: r.errors,
       })));
-      setImportError(`${invalidSelected.length} selected row(s) have validation errors. Fix them or deselect before importing.`);
+    }
+
+    if (validRows.length === 0) {
+      setImportError(`${invalidSelected.length} selected row(s) have validation errors and could not be imported. Please check the error list.`);
       return;
     }
 
