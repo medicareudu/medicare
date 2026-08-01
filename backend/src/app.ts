@@ -26,9 +26,11 @@ app.use(
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
       const isVercel = /\.vercel\.app$/.test(origin);
+      const isNetlify = /\.netlify\.app$/.test(origin);
+      const isRender = /\.onrender\.com$/.test(origin);
       const allowed =
         origin === env.FRONTEND_URL ||
-        isVercel ||
+        isVercel || isNetlify || isRender ||
         ((env.NODE_ENV === 'development' || env.NODE_ENV === 'test') && /^http:\/\/localhost:\d+$/.test(origin));
       callback(null, allowed);
     },
