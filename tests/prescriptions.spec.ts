@@ -40,4 +40,23 @@ test.describe('Medicine Requests & Dispensing Flow', () => {
     // 6. Verify Success
     await expect(page.getByText(/Generated & Transmitted to Staff Pharmacy Dashboard/i)).toBeVisible();
   });
+
+  test('should issue direct OTC medicine purchase successfully', async ({ page }) => {
+    // 1. Navigate to Direct Purchase tab via sidebar
+    await page.getByRole('button', { name: 'Direct Purchase' }).click();
+    await expect(page.getByRole('heading', { name: 'Over-The-Counter Medicine Checkout' })).toBeVisible();
+
+    // 2. Select Medicine
+    const medicineSelect = page.locator('select').first();
+    await medicineSelect.selectOption({ index: 1 });
+
+    // 3. Click Add
+    await page.getByRole('button', { name: 'Add', exact: true }).click();
+
+    // 4. Submit Purchase
+    await page.getByRole('button', { name: 'Complete & Issue Purchase' }).click();
+
+    // 5. Verify Transaction Completion
+    await expect(page.getByRole('heading', { name: 'Direct OTC Purchase Issued' })).toBeVisible();
+  });
 });

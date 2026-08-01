@@ -154,6 +154,16 @@ export const prescriptionsApi = {
     const { data } = await api.post('/prescriptions', p);
     return data as Prescription;
   },
+  directPurchase: async (payload: {
+    patientName?: string;
+    patientNo?: string;
+    medicines: Array<{ medicineId: string; name: string; qty: number; price: number; unit?: string }>;
+    totalAmount: number;
+    discount?: number;
+  }) => {
+    const { data } = await api.post('/prescriptions/direct-purchase', payload);
+    return data as Prescription;
+  },
   dispense: async (token: string) => {
     const { data } = await api.post(`/prescriptions/${token}/dispense`);
     return data as Prescription;

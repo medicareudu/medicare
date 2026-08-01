@@ -68,6 +68,13 @@ interface StateContextType {
   deleteServiceFee: (id: string) => Promise<void>;
 
   addPrescription: (p: Omit<Prescription, 'token'>) => Promise<string>;
+  directPurchasePrescription: (payload: {
+    patientName?: string;
+    patientNo?: string;
+    medicines: Array<{ medicineId: string; name: string; qty: number; price: number; unit?: string }>;
+    totalAmount: number;
+    discount?: number;
+  }) => Promise<Prescription | null>;
   dispensePrescription: (token: string, staffName: string) => Promise<Prescription | null>;
   updatePrescriptionStatus: (token: string, status: 'Pending' | 'Completed' | 'Overdue') => Promise<void>;
 
@@ -268,6 +275,26 @@ export const StateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return created.token;
   };
 
+  const directPurchasePrescription = async (payload: {
+    patientName?: string;
+    patientNo?: string;
+    medicines: Array<{ medicineId: string; name: string; qty: number; price: number; unit?: string }>;
+    totalAmount: number;
+    discount?: number;
+  }): Promise<Prescription | null> => {
+    try {
+      const created = await prescriptionsApi.directPurchase(payload);
+      setPrescriptions(prev => [created, ...prev]);
+      const data = await dataApi.getAll();
+      setMedicines(data.medicines);
+      setHistory(data.history);
+      return created;
+    } catch (err) {
+      console.error('Direct purchase failed:', err);
+      throw err;
+    }
+  };
+
   const dispensePrescription = async (token: string, _staffName: string): Promise<Prescription | null> => {
     try {
       const updated = await prescriptionsApi.dispense(token);
@@ -380,6 +407,7 @@ export const StateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       updateServiceFee,
       deleteServiceFee,
       addPrescription,
+      directPurchasePrescription,
       dispensePrescription,
       updatePrescriptionStatus,
       updatePharmacyInfo,

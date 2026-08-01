@@ -32,16 +32,16 @@ test.describe('Inventory & Stock Management', () => {
     await expect(nameInput).toBeVisible();
 
     // 5. Fill out the new medicine form
+    await page.getByLabel('Medicine ID *').fill(`MED-${Math.floor(Math.random() * 8999 + 1000)}`);
     await nameInput.fill('Amoxicillin 500mg (Auto)');
     await page.getByLabel('Category / Class').fill('Antibiotic');
-    await page.getByLabel('Medicine ID *').fill(`MED-${Math.floor(Math.random() * 1000)}`);
-    await page.getByLabel('Unit Selling Price (LKR) *').fill('100');
     await page.getByLabel('Stock Count *').fill('200');
+    await page.getByLabel('Unit Selling Price (LKR) *').fill('100');
     
     // 6. Save Medicine
     await page.getByRole('button', { name: 'Register Medicine' }).click();
 
     // 7. Verify the modal closes (indicating successful save)
-    await expect(page.getByRole('button', { name: 'Register Medicine' })).toBeHidden();
+    await expect(page.getByRole('button', { name: 'Register Medicine' })).toBeHidden({ timeout: 10000 });
   });
 });

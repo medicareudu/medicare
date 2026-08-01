@@ -184,4 +184,104 @@ router.patch(
   })
 );
 
+const directPurchaseSchema = z.object({
+  patientName: z.string().default('Walk-in Customer'),
+  patientNo: z.string().default(''),
+  medicines: z.array(prescriptionItemSchema).min(1, 'At least one medicine is required'),
+  totalAmount: z.number(),
+  discount: z.number().default(0),
+});
+
+router.post(
+  '/direct-purchase',
+  requireStaff,
+  asyncHandler(async (req, res) => {
+    const data = directPurchaseSchema.parse(req.body);
+    const settings = await prisma.pharmacySettings.findFirst();
+    const prefix = settings?.tokenPrefix || 'OTC';
+    const lowStockThreshold = settings?.lowStockThreshold ?? 50;
+
+    for (const item of data.medicines) {
+      const med = await prisma.medicine.findUnique({ where: { medicineId: item.medicineId } });
+      if (!med) {
+        res.status(404).json({ error: `Medicine '${item.name}' not found` });
+        return;
+      }
+      if (med.qty < item.qty) {
+        res.status(400).json({ error: `Insufficient stock for '${item.name}'. Available: ${med.qty}, requested: ${item.qty}` });
+        return;
+      }
+    }
+
+    const allPrescriptions = await prisma.prescription.findMany({ select: { token: true } });
+    const lastTokenNum = allPrescriptions
+      .map((pr) => {
+        const cleaned = pr.token.replace(`${prefix}-`, '').replace('TKN-', '').replace('MED-', '').replace('OTC-', '');
+        return parseInt(cleaned, 10) || 0;
+      })
+      .reduce((max, current) => Math.max(max, current), 127);
+
+    const token = `${prefix}-${(lastTokenNum + 1).toString().padStart(5, '0')}`;
+    const now = new Date();
+    const formattedDate = now.toLocaleString('sv-SE', { timeZone: 'Asia/Colombo' }).substring(0, 16);
+    const dateStr = now.toISOString().slice(0, 10);
+    const patientNo = data.patientNo || `OTC-${now.getFullYear()}-${(lastTokenNum + 1).toString().padStart(3, '0')}`;
+
+    const updatedMeds = await prisma.$transaction(async (tx) => {
+      const results = [];
+      for (const item of data.medicines) {
+        const med = await tx.medicine.findUnique({ where: { medicineId: item.medicineId } });
+        if (med) {
+          const updated = await tx.medicine.update({
+            where: { uid: med.uid },
+            data: { qty: Math.max(0, med.qty - item.qty) },
+          });
+          results.push(updated);
+        }
+      }
+      return results;
+    });
+
+    const prescription = await prisma.prescription.create({
+      data: {
+        token,
+        patientName: data.patientName || 'Walk-in Customer',
+        patientNo,
+        doctor: 'Direct OTC Sale',
+        date: dateStr,
+        medicines: data.medicines,
+        consultationFee: 0,
+        additionalCharges: [],
+        totalAmount: data.totalAmount,
+        discount: data.discount,
+        status: 'Completed',
+        issuedAt: formattedDate,
+        issuedBy: req.user!.name,
+      },
+    });
+
+    const medNames = data.medicines.map((m) => `${m.name} (x${m.qty})`).join(', ');
+    await addHistoryLog(
+      'Issued',
+      token,
+      `Direct OTC purchase issued (${token}) for ${data.patientName || 'Walk-in Customer'}. Items: ${medNames}. Total: LKR ${data.totalAmount}.`,
+      req.user!.name
+    );
+
+    for (const med of updatedMeds) {
+      const threshold = med.minThreshold ?? lowStockThreshold;
+      if (med.qty <= threshold) {
+        await addHistoryLog(
+          'Alert',
+          med.medicineId,
+          `Low stock alert — ${med.name} is at ${med.qty} units (threshold: ${threshold}). Admin notified to reorder.`,
+          'System'
+        );
+      }
+    }
+
+    res.status(201).json(mapPrescription(prescription));
+  })
+);
+
 export default router;

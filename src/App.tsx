@@ -16,10 +16,11 @@ import { SettingsComponent } from './components/Settings';
 import { VerifyToken } from './components/VerifyToken';
 import { AccessDenied } from './components/AccessDenied';
 import { IncomeLedger } from './components/IncomeLedger';
+import { DirectPurchase } from './components/DirectPurchase';
 import { LogOut } from 'lucide-react';
 
-const ADMIN_TABS = new Set(['dashboard', 'staffdashboard', 'medicines', 'request', 'stock', 'patients', 'suppliers', 'history', 'reports', 'income', 'settings', 'verify']);
-const STAFF_TABS = new Set(['dashboard', 'verify']);
+const ADMIN_TABS = new Set(['dashboard', 'staffdashboard', 'medicines', 'request', 'directsale', 'stock', 'patients', 'suppliers', 'history', 'reports', 'income', 'settings', 'verify']);
+const STAFF_TABS = new Set(['dashboard', 'directsale', 'verify']);
 
 const AppContent: React.FC = () => {
   const { currentUser, currentTab, setTab, logout, isInitialized, isLoading } = useAppState();
@@ -72,6 +73,8 @@ const AppContent: React.FC = () => {
         return isAdmin ? <MedicineManagement /> : <AccessDenied message="Only Admin can manage medicines and import Excel files." />;
       case 'request':
         return isAdmin ? <NewRequest /> : <AccessDenied message="Only Admin can create medicine requests." />;
+      case 'directsale':
+        return <DirectPurchase />;
       case 'stock':
         return isAdmin ? <StockOverview /> : <AccessDenied message="Only Admin can view stock overview." />;
       case 'patients':

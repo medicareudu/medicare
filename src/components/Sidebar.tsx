@@ -15,7 +15,8 @@ import {
   ScanLine,
   User,
   Banknote,
-  LogOut
+  LogOut,
+  ShoppingBag
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -48,6 +49,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onLogoutClick }) => {
       section: 'Workflow',
       items: [
         { id: 'request', icon: FilePlus, label: 'Medicine Request', badge: null },
+        { id: 'directsale', icon: ShoppingBag, label: 'Direct Purchase', badge: null },
       ]
     },
     {
@@ -69,6 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onLogoutClick }) => {
       section: 'Pharmacy Staff',
       items: [
         { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', badge: pendingStaffCount > 0 ? `${pendingStaffCount}` : null, badgeType: 'amber' },
+        { id: 'directsale', icon: ShoppingBag, label: 'Direct Purchase', badge: null },
         { id: 'verify', icon: ScanLine, label: 'Verify & Issue', badge: null },
       ]
     }
