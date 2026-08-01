@@ -57,17 +57,18 @@ router.post(
 
     await addHistoryLog('Staff', user.staffId, `User ${user.name} logged in successfully`, user.name);
 
+    const isProd = process.env.NODE_ENV === 'production';
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 15 * 60 * 1000 // 15 minutes
     });
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
 
@@ -107,10 +108,11 @@ router.post(
       name: user.name,
     };
 
+    const isProd = process.env.NODE_ENV === 'production';
     res.cookie('accessToken', signAccessToken(payload), {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 15 * 60 * 1000 // 15 minutes
     });
 
