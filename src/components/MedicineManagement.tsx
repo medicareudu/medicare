@@ -412,6 +412,13 @@ export const MedicineManagement: React.FC = () => {
     return effective;
   };
 
+  const isValidExpiry = (dateStr: string): boolean => {
+    if (!dateStr) return false;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return false;
+    const d = new Date(dateStr);
+    return !isNaN(d.getTime()) && d.getFullYear() > 1900 && d.getFullYear() < 2200;
+  };
+
   const mapAndValidateRows = (rows: any[], mapping: typeof columnMapping) => {
     const effectiveMap = getEffectiveMapping(mapping);
     return rows.map((row, index) => {
