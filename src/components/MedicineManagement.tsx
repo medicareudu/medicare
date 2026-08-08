@@ -396,25 +396,33 @@ export const MedicineManagement: React.FC = () => {
     return mapping;
   };
 
-  const isValidExpiry = (expiry: string): boolean => /^\d{4}-\d{2}-\d{2}$/.test(expiry);
+  const getEffectiveMapping = (mapping: typeof columnMapping) => {
+    const effective = { ...mapping };
+    const mainNameCol = effective.genericName || effective.name || effective.tradeName;
+    if (!effective.genericName) effective.genericName = mainNameCol;
+    if (!effective.tradeName) effective.tradeName = mainNameCol;
+    if (!effective.name) effective.name = mainNameCol;
+    return effective;
+  };
 
   const mapAndValidateRows = (rows: any[], mapping: typeof columnMapping) => {
+    const effectiveMap = getEffectiveMapping(mapping);
     return rows.map((row, index) => {
       const errors: string[] = [];
 
-      const id = String(row[mapping.id] || '').trim().toUpperCase();
-      const genericName = String(row[mapping.genericName] || row[mapping.name] || row[mapping.tradeName] || '').trim();
-      const tradeName = String(row[mapping.tradeName] || row[mapping.genericName] || row[mapping.name] || '').trim();
+      const id = String(row[effectiveMap.id] || '').trim().toUpperCase();
+      const genericName = String(row[effectiveMap.genericName] || row[effectiveMap.name] || row[effectiveMap.tradeName] || '').trim();
+      const tradeName = String(row[effectiveMap.tradeName] || row[effectiveMap.genericName] || row[effectiveMap.name] || '').trim();
       const name = genericName || tradeName;
-      const category = String(row[mapping.category] || '').trim();
-      const qtyVal = row[mapping.qty];
-      const expiryVal = row[mapping.expiry];
-      const supplierVal = row[mapping.supplier];
-      const priceVal = row[mapping.price];
-      const minThresholdVal = row[mapping.minThreshold];
+      const category = String(row[effectiveMap.category] || '').trim();
+      const qtyVal = row[effectiveMap.qty];
+      const expiryVal = row[effectiveMap.expiry];
+      const supplierVal = row[effectiveMap.supplier];
+      const priceVal = row[effectiveMap.price];
+      const minThresholdVal = row[effectiveMap.minThreshold];
 
       if (!id) errors.push('Medicine ID is required');
-      if (!genericName && !tradeName) errors.push('Medicine Name (Generic or Trade) is required');
+      if (!genericName && !tradeName) errors.push('Medicine Name is required');
 
       const qty = Number(qtyVal);
       if (qtyVal === '' || qtyVal === undefined || qtyVal === null) {
@@ -615,11 +623,7 @@ export const MedicineManagement: React.FC = () => {
   };
 
   const handleProceedToPreview = () => {
-    const effectiveMapping = { ...columnMapping };
-    const mainNameCol = effectiveMapping.genericName || effectiveMapping.name || effectiveMapping.tradeName;
-    if (!effectiveMapping.genericName) effectiveMapping.genericName = mainNameCol;
-    if (!effectiveMapping.tradeName) effectiveMapping.tradeName = mainNameCol;
-    if (!effectiveMapping.name) effectiveMapping.name = mainNameCol;
+    const mainNameCol = columnMapping.genericName || columnMapping.name || columnMapping.tradeName;
 
     if (!mainNameCol) {
       setImportError('Please map at least one Medicine Name column to proceed.');
@@ -628,7 +632,7 @@ export const MedicineManagement: React.FC = () => {
     setImportError('');
     
     // Map & validate rows to set default selected indices
-    const validated = mapAndValidateRows(rawRows, effectiveMapping);
+    const validated = mapAndValidateRows(rawRows, columnMapping);
     const initialActions: Record<number, 'update' | 'skip'> = {};
     const initialSelected = new Set<number>();
     validated.forEach((row, idx) => {
