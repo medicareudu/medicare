@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { ErrorBoundary } from './ErrorBoundary';
 import { useAppState } from '../context/StateContext';
 import { Medicine } from '../types';
 import { 
@@ -456,7 +457,7 @@ export const MedicineManagement: React.FC = () => {
       if (isNaN(minThreshold) || minThreshold < 0) minThreshold = 50;
 
       const hasDuplicate = id && name && medicines.some(
-        (m) => m.id.toUpperCase() === id || m.name.toLowerCase() === name.toLowerCase()
+        (m) => (m.id || '').toUpperCase() === id || (m.name || '').toLowerCase() === name.toLowerCase()
       );
 
       const isValid = errors.length === 0;
@@ -1576,54 +1577,58 @@ export const MedicineManagement: React.FC = () => {
 
                         {rawRows.length > 0 ? (
                           (() => {
-                            const firstRowObj = rawRows[0];
-                            const mappedSample = mapAndValidateRows([firstRowObj], columnMapping)[0] || { id: '', name: '', category: '', qty: 0, price: 0, expiry: '', supplier: '', warnings: [] };
-                            return (
-                              <div className="space-y-2.5 text-xs text-slate-600">
-                                <div>
-                                  <span className="text-[10px] font-semibold text-slate-400 block">Medicine ID:</span>
-                                  <span className="font-mono font-bold text-slate-800 bg-white px-1.5 py-0.5 rounded border border-slate-100 text-[10px]">{mappedSample.id}</span>
-                                </div>
-                                <div>
-                                  <span className="text-[10px] font-semibold text-slate-400 block">Medicine Name:</span>
-                                  <span className="font-bold text-slate-800">{mappedSample.name}</span>
-                                </div>
-                                <div>
-                                  <span className="text-[10px] font-semibold text-slate-400 block">Class / Category:</span>
-                                  <span className="font-semibold text-slate-700">{mappedSample.category}</span>
-                                </div>
-                                <div className="grid grid-cols-2 gap-2">
+                            try {
+                              const firstRowObj = rawRows[0];
+                              const mappedSample = mapAndValidateRows([firstRowObj], columnMapping)[0] || { id: '', name: '', category: '', qty: 0, price: 0, expiry: '', supplier: '', warnings: [] };
+                              return (
+                                <div className="space-y-2.5 text-xs text-slate-600">
                                   <div>
-                                    <span className="text-[10px] font-semibold text-slate-400 block">Stock Qty:</span>
-                                    <span className="font-mono font-bold text-emerald-600">{mappedSample.qty} units</span>
+                                    <span className="text-[10px] font-semibold text-slate-400 block">Medicine ID:</span>
+                                    <span className="font-mono font-bold text-slate-800 bg-white px-1.5 py-0.5 rounded border border-slate-100 text-[10px]">{mappedSample.id}</span>
                                   </div>
                                   <div>
-                                    <span className="text-[10px] font-semibold text-slate-400 block">Unit Cost:</span>
-                                    <span className="font-mono font-bold text-slate-800">LKR {(Number(mappedSample.price) || 0).toFixed(2)}</span>
-                                  </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-2">
-                                  <div>
-                                    <span className="text-[10px] font-semibold text-slate-400 block">Expiry Date:</span>
-                                    <span className="font-mono font-medium text-slate-500">{mappedSample.expiry}</span>
+                                    <span className="text-[10px] font-semibold text-slate-400 block">Medicine Name:</span>
+                                    <span className="font-bold text-slate-800">{mappedSample.name}</span>
                                   </div>
                                   <div>
-                                    <span className="text-[10px] font-semibold text-slate-400 block">Supplier:</span>
-                                    <span className="font-semibold text-slate-700 truncate block">{mappedSample.supplier}</span>
+                                    <span className="text-[10px] font-semibold text-slate-400 block">Class / Category:</span>
+                                    <span className="font-semibold text-slate-700">{mappedSample.category}</span>
                                   </div>
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <div>
+                                      <span className="text-[10px] font-semibold text-slate-400 block">Stock Qty:</span>
+                                      <span className="font-mono font-bold text-emerald-600">{mappedSample.qty} units</span>
+                                    </div>
+                                    <div>
+                                      <span className="text-[10px] font-semibold text-slate-400 block">Unit Cost:</span>
+                                      <span className="font-mono font-bold text-slate-800">LKR {(Number(mappedSample.price) || 0).toFixed(2)}</span>
+                                    </div>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <div>
+                                      <span className="text-[10px] font-semibold text-slate-400 block">Expiry Date:</span>
+                                      <span className="font-mono font-medium text-slate-500">{mappedSample.expiry}</span>
+                                    </div>
+                                    <div>
+                                      <span className="text-[10px] font-semibold text-slate-400 block">Supplier:</span>
+                                      <span className="font-semibold text-slate-700 truncate block">{mappedSample.supplier}</span>
+                                    </div>
+                                  </div>
+                                  {mappedSample.warnings.length > 0 && (
+                                    <div className="bg-amber-50/50 p-2 rounded border border-amber-100 mt-2 space-y-1">
+                                      <span className="text-[10px] font-bold text-amber-800 flex items-center gap-1">
+                                        <AlertCircle size={10} /> Parser Warnings ({mappedSample.warnings.length}):
+                                      </span>
+                                      {mappedSample.warnings.map((w, idx) => (
+                                        <p key={idx} className="text-[9px] text-amber-700 leading-tight">· {w}</p>
+                                      ))}
+                                    </div>
+                                  )}
                                 </div>
-                                {mappedSample.warnings.length > 0 && (
-                                  <div className="bg-amber-50/50 p-2 rounded border border-amber-100 mt-2 space-y-1">
-                                    <span className="text-[10px] font-bold text-amber-800 flex items-center gap-1">
-                                      <AlertCircle size={10} /> Parser Warnings ({mappedSample.warnings.length}):
-                                    </span>
-                                    {mappedSample.warnings.map((w, idx) => (
-                                      <p key={idx} className="text-[9px] text-amber-700 leading-tight">· {w}</p>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            );
+                              );
+                            } catch (err: any) {
+                              return <div className="text-xs text-red-600 p-2 font-semibold">Preview Render Error: {err.message}</div>;
+                            }
                           })()
                         ) : (
                           <span className="text-slate-400 text-xs">No columns mapped yet.</span>

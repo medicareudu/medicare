@@ -17,6 +17,7 @@ import { VerifyToken } from './components/VerifyToken';
 import { AccessDenied } from './components/AccessDenied';
 import { IncomeLedger } from './components/IncomeLedger';
 import { DirectPurchase } from './components/DirectPurchase';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { LogOut } from 'lucide-react';
 
 const ADMIN_TABS = new Set(['dashboard', 'staffdashboard', 'medicines', 'request', 'directsale', 'stock', 'patients', 'suppliers', 'history', 'reports', 'income', 'settings', 'verify']);
@@ -70,7 +71,7 @@ const AppContent: React.FC = () => {
       case 'staffdashboard':
         return isAdmin ? <StaffDashboard onVerifyWithToken={handleVerifyWithToken} isAdminViewing={true} /> : <AccessDenied message="Access denied." />;
       case 'medicines':
-        return isAdmin ? <MedicineManagement /> : <AccessDenied message="Only Admin can manage medicines and import Excel files." />;
+        return isAdmin ? <ErrorBoundary fallbackLabel="Medicine Management crashed. Click Try Again."><MedicineManagement /></ErrorBoundary> : <AccessDenied message="Only Admin can manage medicines and import Excel files." />;
       case 'request':
         return isAdmin ? <NewRequest /> : <AccessDenied message="Only Admin can create medicine requests." />;
       case 'directsale':
