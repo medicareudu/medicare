@@ -384,7 +384,7 @@ export const NewRequest: React.FC = () => {
                     <option value="">-- Choose Drug --</option>
                     {medicines.map(m => (
                       <option key={m._uid} value={m.id}>
-                        {m.name} (LKR {m.price} | {m.qty} left)
+                        {m.name} ({m.genericName}) - LKR {m.price} | {m.qty} left
                       </option>
                     ))}
                   </select>

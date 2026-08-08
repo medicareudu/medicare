@@ -10,6 +10,7 @@ const router = Router();
 const medicineSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
+  genericName: z.string().min(1),
   category: z.string().default('General'),
   qty: z.number().int().min(0),
   expiry: z.string().min(1),
@@ -40,6 +41,8 @@ router.post(
         where: { uid: existing.uid },
         data: {
           medicineId: data.id,
+          name: data.name.trim(),
+          genericName: data.genericName.trim(),
           qty: existing.qty + data.qty,
           price: data.price,
           expiry: data.expiry,
@@ -62,6 +65,7 @@ router.post(
       data: {
         medicineId: data.id,
         name: data.name.trim(),
+        genericName: data.genericName.trim(),
         category: data.category,
         qty: data.qty,
         expiry: data.expiry,
@@ -94,6 +98,7 @@ router.put(
       data: {
         ...(data.id && { medicineId: data.id }),
         ...(data.name && { name: data.name }),
+        ...(data.genericName && { genericName: data.genericName }),
         ...(data.category !== undefined && { category: data.category }),
         ...(data.qty !== undefined && { qty: data.qty }),
         ...(data.expiry && { expiry: data.expiry }),
@@ -142,6 +147,7 @@ router.post(
     const importItemSchema = z.object({
       id: z.string().min(1, 'Medicine ID is required'),
       name: z.string().min(1, 'Medicine name is required'),
+      genericName: z.string().min(1, 'Generic name is required'),
       category: z.string().default('General'),
       qty: z.number().int('Quantity must be a whole number').min(0, 'Quantity cannot be negative'),
       expiry: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Expiry must be YYYY-MM-DD'),
@@ -186,6 +192,7 @@ router.post(
             data: {
               medicineId,
               name: item.name.trim(),
+              genericName: item.genericName.trim(),
               category: item.category,
               qty: existing.qty + item.qty,
               expiry: item.expiry,
@@ -200,6 +207,7 @@ router.post(
             data: {
               medicineId,
               name: item.name.trim(),
+              genericName: item.genericName.trim(),
               category: item.category,
               qty: item.qty,
               expiry: item.expiry,

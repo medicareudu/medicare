@@ -2,6 +2,7 @@ export interface Medicine {
   _uid: number;
   id: string; // e.g. MED-001
   name: string;
+  genericName: string;
   category: string;
   qty: number;
   expiry: string; // YYYY-MM-DD

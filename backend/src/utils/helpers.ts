@@ -60,10 +60,12 @@ export async function findExistingMedicine(
   return matched || null;
 }
 
+
 export function mapMedicine(m: {
   uid: number;
   medicineId: string;
   name: string;
+  genericName: string;
   category: string;
   qty: number;
   expiry: string;
@@ -75,6 +77,7 @@ export function mapMedicine(m: {
     _uid: m.uid,
     id: m.medicineId,
     name: m.name,
+    genericName: m.genericName,
     category: m.category,
     qty: m.qty,
     expiry: m.expiry,

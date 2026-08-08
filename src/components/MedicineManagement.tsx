@@ -178,6 +178,7 @@ export const MedicineManagement: React.FC = () => {
   // ─── Add/Edit Form State ───
   const [formId, setFormId] = useState('');
   const [formName, setFormName] = useState('');
+  const [formGenericName, setFormGenericName] = useState('');
   const [formCategory, setFormCategory] = useState('');
   const [formQty, setFormQty] = useState(100);
   const [formExpiry, setFormExpiry] = useState('');
@@ -199,6 +200,7 @@ export const MedicineManagement: React.FC = () => {
   const [columnMapping, setColumnMapping] = useState({
     id: '',
     name: '',
+    genericName: '',
     category: '',
     qty: '',
     expiry: '',
@@ -218,7 +220,9 @@ export const MedicineManagement: React.FC = () => {
 
   // ─── Filter Logic ───
   const filteredMedicines = medicines.filter(m => {
-    const matchesSearch = m.name.toLowerCase().includes(searchTerm.toLowerCase()) || m.id.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = m.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          m.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          m.genericName.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || m.category === selectedCategory;
     
     let matchesStock = true;
@@ -238,6 +242,7 @@ export const MedicineManagement: React.FC = () => {
     setEditingMed(null);
     setFormId(`MED-${Math.floor(100 + Math.random() * 900)}`);
     setFormName('');
+    setFormGenericName('');
     setFormCategory('');
     setFormQty(100);
     setFormExpiry('');
@@ -251,6 +256,7 @@ export const MedicineManagement: React.FC = () => {
     setEditingMed(med);
     setFormId(med.id);
     setFormName(med.name);
+    setFormGenericName(med.genericName);
     setFormCategory(med.category);
     setFormQty(med.qty);
     setFormExpiry(med.expiry);
@@ -267,6 +273,7 @@ export const MedicineManagement: React.FC = () => {
     const payload = {
       id: formId.trim().toUpperCase(),
       name: formName.trim(),
+      genericName: formGenericName.trim(),
       category: formCategory.trim() || 'General',
       qty: Number(formQty),
       expiry: formExpiry || '2027-12-31',
@@ -338,6 +345,7 @@ export const MedicineManagement: React.FC = () => {
     const mapping = {
       id: '',
       name: '',
+      genericName: '',
       category: '',
       qty: '',
       expiry: '',
@@ -348,7 +356,8 @@ export const MedicineManagement: React.FC = () => {
 
     const rules = {
       id: ['id', 'code', 'medicine id', 'med id', 'item id', 'sku', 'reference', 'medicine_id', 'item_id', 'medid', 'medcode'],
-      name: ['name', 'medicine', 'product', 'item name', 'description', 'title', 'medicine_name', 'item_name', 'product_name', 'brand'],
+      name: ['trade name', 'brand name', 'name', 'medicine', 'product', 'item name', 'description', 'title', 'medicine_name', 'item_name', 'product_name', 'brand'],
+      genericName: ['generic', 'generic name', 'active ingredient', 'ingredient', 'formula'],
       category: ['category', 'class', 'group', 'type', 'classification', 'drug class', 'genre'],
       qty: ['quantity', 'qty', 'stock', 'count', 'amount', 'units', 'stock_qty', 'stock_quantity', 'on hand', 'qoh'],
       expiry: ['expiry', 'expire', 'expiry date', 'exp date', 'exp', 'validity', 'expiry_date', 'exp_date', 'expired'],
@@ -382,6 +391,7 @@ export const MedicineManagement: React.FC = () => {
 
       const id = String(row[mapping.id] || '').trim().toUpperCase();
       const name = String(row[mapping.name] || '').trim();
+      const genericName = String(row[mapping.genericName] || '').trim();
       const category = String(row[mapping.category] || '').trim();
       const qtyVal = row[mapping.qty];
       const expiryVal = row[mapping.expiry];
@@ -390,7 +400,8 @@ export const MedicineManagement: React.FC = () => {
       const minThresholdVal = row[mapping.minThreshold];
 
       if (!id) errors.push('Medicine ID is required');
-      if (!name) errors.push('Medicine Name is required');
+      if (!name) errors.push('Trade Name is required');
+      if (!genericName) errors.push('Generic Name is required');
 
       const qty = Number(qtyVal);
       if (qtyVal === '' || qtyVal === undefined || qtyVal === null) {
@@ -426,6 +437,7 @@ export const MedicineManagement: React.FC = () => {
       return {
         id: id || `ROW-${index + 1}`,
         name: name || `Row ${index + 1}`,
+        genericName: genericName || 'Unknown',
         category: category || 'General',
         qty: isNaN(qty) ? 0 : qty,
         expiry,
@@ -642,6 +654,7 @@ export const MedicineManagement: React.FC = () => {
       const payload: Array<Omit<Medicine, '_uid'> & { action?: 'update' | 'skip' }> = validRows.map(row => ({
         id: row.id,
         name: row.name,
+        genericName: row.genericName,
         category: row.category,
         qty: row.qty,
         expiry: row.expiry,
@@ -949,45 +962,55 @@ export const MedicineManagement: React.FC = () => {
 
             <form onSubmit={handleSave} className="p-5 space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label htmlFor="med-id" className="text-xs font-semibold text-slate-600">Medicine ID *</label>
-                  <input
-                    id="med-id"
-                    type="text"
-                    required
-                    disabled={!!editingMed}
-                    value={formId}
-                    onChange={(e) => setFormId(e.target.value)}
-                    placeholder="e.g. MED-008"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs text-slate-800 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-100 disabled:text-slate-400 font-mono font-bold"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label htmlFor="med-name" className="text-xs font-semibold text-slate-600">Medicine Name *</label>
-                  <input
-                    id="med-name"
-                    type="text"
-                    required
-                    value={formName}
-                    onChange={(e) => setFormName(e.target.value)}
-                    placeholder="e.g. Gliclazide 80mg"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs text-slate-800 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
-                  />
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Medicine ID *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formId}
+                      onChange={(e) => setFormId(e.target.value)}
+                      disabled={!!editingMed}
+                      className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 text-slate-800 text-sm rounded-lg py-2 px-3 focus:outline-none transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Trade Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formName}
+                      onChange={(e) => setFormName(e.target.value)}
+                      placeholder="e.g. Panadol 500mg"
+                      className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 text-slate-800 text-sm rounded-lg py-2 px-3 focus:outline-none transition-colors duration-150"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Generic Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formGenericName}
+                      onChange={(e) => setFormGenericName(e.target.value)}
+                      placeholder="e.g. Paracetamol"
+                      className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 text-slate-800 text-sm rounded-lg py-2 px-3 focus:outline-none transition-colors duration-150"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
+                    <input
+                      type="text"
+                      value={formCategory}
+                      onChange={(e) => setFormCategory(e.target.value)}
+                      placeholder="e.g. Analgesic"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs text-slate-800 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+                    />
+                  </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label htmlFor="med-cat" className="text-xs font-semibold text-slate-600">Category / Class</label>
-                  <input
-                    id="med-cat"
-                    type="text"
-                    value={formCategory}
-                    onChange={(e) => setFormCategory(e.target.value)}
-                    placeholder="e.g. Antidiabetic"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs text-slate-800 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
-                  />
-                </div>
                 <div className="space-y-1">
                   <label htmlFor="med-stock" className="text-xs font-semibold text-slate-600">Stock Count *</label>
                   <input
@@ -1000,9 +1023,6 @@ export const MedicineManagement: React.FC = () => {
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs text-slate-800 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
                   />
                 </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label htmlFor="med-expiry" className="text-xs font-semibold text-slate-600">Expiry Date</label>
                   <input
@@ -1013,6 +1033,9 @@ export const MedicineManagement: React.FC = () => {
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs text-slate-800 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
                   />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label htmlFor="med-supplier" className="text-xs font-semibold text-slate-600">Preferred Supplier</label>
                   <select
@@ -1634,6 +1657,9 @@ export const MedicineManagement: React.FC = () => {
                             />
                           </th>
                           <th className="px-4 py-2.5 w-16">Status</th>
+                          <th className="px-3 py-2 text-left text-xs font-semibold text-slate-500 uppercase">Trade Name</th>
+                          <th className="px-3 py-2 text-left text-xs font-semibold text-slate-500 uppercase">Generic Name</th>
+                          <th className="px-3 py-2 text-left text-xs font-semibold text-slate-500 uppercase">Category</th>
                           <th className="px-4 py-2.5 w-24">Medicine ID</th>
                           <th className="px-4 py-2.5">Medicine Name</th>
                           <th className="px-4 py-2.5 w-24">Category</th>
@@ -1664,7 +1690,7 @@ export const MedicineManagement: React.FC = () => {
                           if (filteredPreview.length === 0) {
                             return (
                               <tr>
-                                <td colSpan={9} className="text-center py-8 text-slate-400">
+                                <td colSpan={12} className="text-center py-8 text-slate-400">
                                   No records match current filter settings.
                                 </td>
                               </tr>
@@ -1724,6 +1750,15 @@ export const MedicineManagement: React.FC = () => {
                                       <span>New</span>
                                     </span>
                                   )}
+                                </td>
+                                <td className="px-3 py-2 whitespace-nowrap text-sm text-slate-800 font-medium">
+                                  <input type="text" value={row.name} readOnly className="bg-transparent w-full focus:outline-none" />
+                                </td>
+                                <td className="px-3 py-2 whitespace-nowrap text-sm text-slate-500">
+                                  <input type="text" value={row.genericName} readOnly className="bg-transparent w-full focus:outline-none" />
+                                </td>
+                                <td className="px-3 py-2 whitespace-nowrap text-sm text-slate-500">
+                                  {row.category}
                                 </td>
                                 <td className="px-4 py-3 whitespace-nowrap">
                                   <span className="font-mono font-bold text-slate-700 bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded">
