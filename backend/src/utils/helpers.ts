@@ -27,12 +27,13 @@ export async function findExistingMedicine(
   tx: any,
   medicineId: string,
   name: string = '',
-  cachedMeds?: any[]
+  cachedMeds?: any[],
+  genericName?: string,
+  tradeName?: string,
 ) {
   const safeId = (medicineId || '').toUpperCase().trim();
-  const safeName = (name || '').trim();
 
-  // 1. Match by Unique ID
+  // 1. Match by exact Medicine ID (most reliable)
   if (safeId) {
     const existingById = await tx.medicine.findUnique({
       where: { medicineId: safeId }
@@ -40,37 +41,23 @@ export async function findExistingMedicine(
     if (existingById) return existingById;
   }
 
-  // 2. Match by Name (exact case-insensitive)
-  if (safeName) {
-    const existingByName = await tx.medicine.findFirst({
-      where: { name: { equals: safeName, mode: 'insensitive' } }
+  // 2. Match by exact (genericName + tradeName) pair — handles re-import of same product
+  const safeGeneric = (genericName || name || '').trim().toLowerCase();
+  const safeTrade = (tradeName || name || '').trim().toLowerCase();
+
+  if (safeGeneric && safeTrade) {
+    const allMeds = cachedMeds || await tx.medicine.findMany();
+    const exactMatch = allMeds.find((m: any) => {
+      const dbGeneric = (m.genericName || m.name || '').trim().toLowerCase();
+      const dbTrade = (m.tradeName || m.name || '').trim().toLowerCase();
+      return dbGeneric === safeGeneric && dbTrade === safeTrade;
     });
-    if (existingByName) return existingByName;
+    if (exactMatch) return exactMatch;
   }
 
-  // 3. Fallback: Fuzzy/substring name comparison
-  if (!safeName) return null;
-
-  const allMeds = cachedMeds || await tx.medicine.findMany();
-  const cleanInput = safeName.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
-  if (!cleanInput) return null;
-  const prefixInput = cleanInput.substring(0, 4);
-
-  const matched = allMeds.find((m: any) => {
-    const dbName = (m.name || m.genericName || m.tradeName || '');
-    const cleanDb = dbName.trim().toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
-    if (!cleanDb) return false;
-    if (cleanDb === cleanInput) return true;
-    if (cleanDb.includes(cleanInput) || cleanInput.includes(cleanDb)) return true;
-    
-    const prefixDb = cleanDb.substring(0, 4);
-    if (prefixDb.length >= 4 && prefixDb === prefixInput) return true;
-    
-    return false;
-  });
-
-  return matched || null;
+  return null;
 }
+
 
 export function mapMedicine(m: {
   uid: number;

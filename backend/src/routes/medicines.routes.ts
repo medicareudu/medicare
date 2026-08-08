@@ -185,12 +185,11 @@ router.post(
       const allMeds = await tx.medicine.findMany();
       for (const item of items) {
         const medicineId = (item.id || '').toUpperCase().trim();
-        const searchName = (item.genericName || item.name || item.tradeName || '').trim();
-        const existing = await findExistingMedicine(tx, medicineId, searchName, allMeds);
-
         const genericNameStr = (item.genericName || item.name || item.tradeName || 'Unknown').trim();
         const tradeNameStr = (item.tradeName || item.genericName || item.name || 'Unknown').trim();
         const supplierStr = (item.supplier || 'PharmaCo').trim();
+        const searchName = genericNameStr;
+        const existing = await findExistingMedicine(tx, medicineId, searchName, allMeds, genericNameStr, tradeNameStr);
 
         if (existing) {
           if (item.action === 'skip') {

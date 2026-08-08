@@ -247,13 +247,37 @@ export const MedicineManagement: React.FC = () => {
     return matchesSearch && matchesCategory && matchesStock;
   });
 
+  // ─── Stable deterministic Med ID from generic+trade ───
+  const generateStableId = (generic: string, trade: string): string => {
+    const slug = (s: string) => s.trim().toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 4);
+    const g = slug(generic);
+    const t = slug(trade);
+    if (!g && !t) return `MED-${Math.floor(100 + Math.random() * 900)}`;
+    const prefix = g || t;
+    const suffix = (t && t !== g) ? `-${t}` : '';
+    // Check if ID already exists in inventory
+    const baseId = `${prefix}${suffix}`;
+    const existing = medicines.find(m =>
+      (m.genericName || '').trim().toLowerCase() === generic.trim().toLowerCase() &&
+      (m.tradeName || '').trim().toLowerCase() === trade.trim().toLowerCase()
+    );
+    if (existing) return existing.id; // reuse the same ID
+    // Generate a unique ID with a counter suffix
+    let counter = 1;
+    let candidateId = baseId;
+    while (medicines.some(m => m.id === candidateId)) {
+      candidateId = `${baseId}-${counter++}`;
+    }
+    return candidateId;
+  };
+
   // ─── Form Handlers ───
   const handleOpenAdd = () => {
     setEditingMed(null);
-    setFormId(`MED-${Math.floor(100 + Math.random() * 900)}`);
-    setFormName('');
     setFormGenericName('');
     setFormTradeName('');
+    setFormId('');
+    setFormName('');
     setFormCategory('');
     setFormQty(100);
     setFormExpiry('');
@@ -463,9 +487,12 @@ export const MedicineManagement: React.FC = () => {
       let minThreshold = Number(minThresholdVal);
       if (isNaN(minThreshold) || minThreshold < 0) minThreshold = 50;
 
-      const hasDuplicate = id && name && medicines.some(
-        (m) => (m.id || '').toUpperCase() === id || (m.name || '').toLowerCase() === name.toLowerCase()
-      );
+      // Duplicate = EXACT same generic+trade pair (NOT just same generic — allows Panadol AND Paincare)
+      const hasDuplicate = !!(genericName && tradeName && medicines.some(
+        (m) =>
+          (m.genericName || '').trim().toLowerCase() === genericName.trim().toLowerCase() &&
+          (m.tradeName || '').trim().toLowerCase() === tradeName.trim().toLowerCase()
+      ));
 
       const isValid = errors.length === 0;
 
@@ -868,120 +895,176 @@ export const MedicineManagement: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Grid Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-100 text-xs text-left">
-            <thead className="bg-slate-50 text-slate-400 font-bold uppercase tracking-wider">
-              <tr>
-                <th className="px-5 py-3.5">ID</th>
-                <th className="px-5 py-3.5">Name & Category</th>
-                <th className="px-5 py-3.5">Current Stock</th>
-                <th className="px-5 py-3.5">Min Threshold</th>
-                <th className="px-5 py-3.5">Supplier</th>
-                <th className="px-5 py-3.5">Unit Price (LKR)</th>
-                <th className="px-5 py-3.5">Expiry</th>
-                <th className="px-5 py-3.5">Status</th>
-                <th className="px-5 py-3.5 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 bg-white">
-              {filteredMedicines.map(m => {
-                const stockDetails = getStockLabel(m.qty, m.minThreshold ?? 50);
-                const barColor = getStockBarColor(m.qty, m.minThreshold ?? 50);
-                const fillPct = Math.min(100, Math.round((m.qty / 200) * 100));
+      {/* Main Grid — Card-style grouped list */}
+      <div className="space-y-2">
+        {(() => {
+          // Group medicines by generic name
+          const grouped = new Map<string, typeof filteredMedicines>();
+          for (const m of filteredMedicines) {
+            const key = (m.genericName || m.name || 'Unknown').trim();
+            if (!grouped.has(key)) grouped.set(key, []);
+            grouped.get(key)!.push(m);
+          }
 
-                return (
-                  <tr key={m._uid} className="hover:bg-slate-50/50 transition duration-150">
-                    <td className="px-5 py-4 whitespace-nowrap">
-                      <span className="font-mono font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
-                        {m.id}
-                      </span>
-                    </td>
-                    <td className="px-5 py-4 whitespace-nowrap">
-                      <div className="font-semibold text-slate-800 text-sm">{m.genericName || m.name}</div>
-                      <div className="text-xs text-sky-600 font-medium mt-0.5">Brand: {m.tradeName || m.name}</div>
-                      <span className="inline-block bg-slate-100 text-slate-600 rounded text-[10px] font-semibold tracking-wide px-1.5 py-0.5 mt-1">
-                        {m.category || 'General'}
-                      </span>
-                    </td>
-                    <td className="px-5 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-800 text-sm">{m.qty}</span>
-                        <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden flex-shrink-0">
-                          <div className={`h-full ${barColor}`} style={{ width: `${fillPct}%` }} />
+          if (filteredMedicines.length === 0) {
+            return (
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm text-center py-14 text-slate-400 font-medium text-xs">
+                {medicines.length === 0 ? (
+                  <div className="space-y-3">
+                    <p className="text-slate-600 font-semibold">No medicines in inventory yet.</p>
+                    <p className="text-xs text-slate-500 max-w-md mx-auto">
+                      {isAdmin
+                        ? 'Use Excel Import to load supplier invoice records (.xlsx / .xls).'
+                        : 'Ask an Admin to import medicine records from a supplier Excel file.'}
+                    </p>
+                    {isAdmin && (
+                      <button
+                        onClick={() => setShowImportModal(true)}
+                        className="btn btn-primary text-xs mx-auto mt-2"
+                      >
+                        <FileUp size={14} />
+                        <span>Import from Excel</span>
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  'No matching medicines found.'
+                )}
+              </div>
+            );
+          }
+
+          return Array.from(grouped.entries()).map(([genericName, variants]) => {
+            const category = variants[0]?.category || 'General';
+            return (
+              <div key={genericName} className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                {/* Generic Name Header Row */}
+                <div className="flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-slate-50 to-white border-b border-slate-100">
+                  <div className="w-2 h-2 rounded-full bg-sky-400 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <span className="font-bold text-slate-800 text-sm">{genericName}</span>
+                    <span className="ml-2 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Generic Drug</span>
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">{category}</span>
+                  <span className="text-[10px] text-slate-400 font-medium">{variants.length} brand{variants.length !== 1 ? 's' : ''}</span>
+                </div>
+
+                {/* Trade Name Variant Rows */}
+                {variants.map((m, vi) => {
+                  const stockDetails = getStockLabel(m.qty, m.minThreshold ?? 50);
+                  const barColor = getStockBarColor(m.qty, m.minThreshold ?? 50);
+                  const fillPct = Math.min(100, Math.round((m.qty / Math.max(m.qty, 200)) * 100));
+                  const expiryDate = new Date(m.expiry);
+                  const daysToExpiry = Math.ceil((expiryDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+                  const isExpiringSoon = daysToExpiry > 0 && daysToExpiry <= 60;
+                  const isExpired = daysToExpiry <= 0;
+
+                  return (
+                    <div
+                      key={m._uid}
+                      className={`flex items-center gap-4 px-5 py-3.5 text-xs transition duration-150 hover:bg-blue-50/30 ${
+                        vi < variants.length - 1 ? 'border-b border-slate-100' : ''
+                      }`}
+                    >
+                      {/* Brand Indicator */}
+                      <div className="w-4 flex-shrink-0 flex flex-col items-center gap-1">
+                        <div className="w-px h-2 bg-slate-200" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                      </div>
+
+                      {/* Trade Name + ID */}
+                      <div className="flex-1 min-w-0">
+                        <div className="font-bold text-slate-800">{m.tradeName || m.name}</div>
+                        <div className="text-[10px] text-slate-400 font-mono mt-0.5 flex items-center gap-1">
+                          <span className="bg-slate-100 border border-slate-200 rounded px-1 py-px font-bold text-slate-600">{m.id}</span>
+                          <span>·</span>
+                          <span className="text-slate-400">{m.supplier}</span>
                         </div>
                       </div>
-                    </td>
-                    <td className="px-5 py-4 whitespace-nowrap text-slate-500 font-mono text-sm">
-                      {m.minThreshold ?? 50}
-                    </td>
-                    <td className="px-5 py-4 whitespace-nowrap text-slate-500 font-medium">
-                      {m.supplier}
-                    </td>
-                    <td className="px-5 py-4 whitespace-nowrap font-mono text-sm font-semibold text-slate-800">
-                      LKR {m.price.toFixed(2)}
-                    </td>
-                    <td className="px-5 py-4 whitespace-nowrap text-slate-400 font-mono">
-                      {m.expiry}
-                    </td>
-                    <td className="px-5 py-4 whitespace-nowrap">
-                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${stockDetails.bg}`}>
-                        {stockDetails.label}
-                      </span>
-                    </td>
-                    <td className="px-5 py-4 whitespace-nowrap text-right">
-                      <div className="flex items-center justify-end gap-1.5">
+
+                      {/* Stock */}
+                      <div className="w-32 flex-shrink-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-slate-700">{m.qty} units</span>
+                          <span className="text-[9px] text-slate-400">min: {m.minThreshold ?? 50}</span>
+                        </div>
+                        <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                          <div className={`h-full ${barColor} transition-all`} style={{ width: `${fillPct}%` }} />
+                        </div>
+                      </div>
+
+                      {/* Stock Badge */}
+                      <div className="w-24 flex-shrink-0">
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${stockDetails.bg}`}>
+                          {stockDetails.label}
+                        </span>
+                      </div>
+
+                      {/* Price */}
+                      <div className="w-24 flex-shrink-0 font-mono font-bold text-slate-800">
+                        LKR {(Number(m.price) || 0).toFixed(2)}
+                      </div>
+
+                      {/* Expiry */}
+                      <div className="w-24 flex-shrink-0">
+                        <span className={`font-mono text-[10px] px-1.5 py-0.5 rounded font-semibold ${
+                          isExpired
+                            ? 'bg-red-100 text-red-700'
+                            : isExpiringSoon
+                            ? 'bg-amber-50 text-amber-700'
+                            : 'text-slate-400'
+                        }`}>
+                          {m.expiry}
+                        </span>
+                        {isExpired && <div className="text-[9px] text-red-600 font-bold mt-0.5">EXPIRED</div>}
+                        {isExpiringSoon && !isExpired && <div className="text-[9px] text-amber-600 font-semibold mt-0.5">{daysToExpiry}d left</div>}
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center gap-1 flex-shrink-0">
                         <button
                           onClick={() => handleOpenEdit(m)}
-                          className="p-1.5 text-slate-500 hover:text-sky-600 hover:bg-slate-100 rounded transition duration-100 outline-none"
-                          title="Edit Medicine Record"
+                          className="p-1.5 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded transition duration-100 outline-none"
+                          title="Edit"
                         >
-                          <Edit size={14} />
+                          <Edit size={13} />
                         </button>
                         <button
                           onClick={() => handleDelete(m)}
-                          className="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded transition duration-100 outline-none"
-                          title="Delete Medicine Record"
+                          className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition duration-100 outline-none"
+                          title="Delete"
                         >
-                          <Trash2 size={14} />
+                          <Trash2 size={13} />
                         </button>
                       </div>
-                    </td>
-                  </tr>
-                );
-              })}
-              {filteredMedicines.length === 0 && (
-                <tr>
-                  <td colSpan={9} className="text-center py-12 text-slate-400 font-medium">
-                    {medicines.length === 0 ? (
-                      <div className="space-y-3">
-                        <p className="text-slate-600 font-semibold">No medicines in inventory yet.</p>
-                        <p className="text-xs text-slate-500 max-w-md mx-auto">
-                          {isAdmin
-                            ? 'Use Excel Import to load supplier invoice records (.xlsx / .xls). Download the template to get started with 24 sample medicines from MediSupply.'
-                            : 'Ask an Admin to import medicine records from a supplier Excel file.'}
-                        </p>
-                        {isAdmin && (
-                          <button
-                            onClick={() => setShowImportModal(true)}
-                            className="btn btn-primary text-xs mx-auto mt-2"
-                          >
-                            <FileUp size={14} />
-                            <span>Import from Excel</span>
-                          </button>
-                        )}
-                      </div>
-                    ) : (
-                      'No matching medicines found in inventory directory.'
-                    )}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          });
+        })()}
       </div>
+
+      {/* Placeholder for empty filtered state (kept as fallback) */}
+      {false && (
+        <div className="bg-white rounded-xl border border-slate-200">
+          <div className="text-center py-14 text-slate-400 font-medium text-xs">
+            {medicines.length === 0 ? (
+              <div className="space-y-3">
+                <p className="text-slate-600 font-semibold">No medicines in inventory yet.</p>
+                {isAdmin && (
+                  <button onClick={() => setShowImportModal(true)} className="btn btn-primary text-xs mx-auto mt-2">
+                    <FileUp size={14} /><span>Import from Excel</span>
+                  </button>
+                )}
+              </div>
+            ) : (
+              'No matching medicines found.'
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ADD/EDIT FORM MODAL */}
       {showFormModal && (
@@ -1001,45 +1084,69 @@ export const MedicineManagement: React.FC = () => {
             </div>
 
             <form onSubmit={handleSave} className="p-5 space-y-4">
+              {/* Explainer callout */}
+              <div className="bg-sky-50 border border-sky-200 rounded-lg px-4 py-3 text-xs text-sky-800 leading-relaxed">
+                <span className="font-bold block mb-1">💊 Generic vs Trade Name</span>
+                <span className="text-sky-700">
+                  <strong>Generic Name</strong> = the drug molecule (e.g. <em>Paracetamol</em>).<br />
+                  <strong>Trade Name</strong> = the brand/product (e.g. <em>Panadol 500mg</em>, <em>Paincare 500mg</em>).<br />
+                  Same generic + different trade = two separate inventory entries (different prices & suppliers).
+                </span>
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Medicine ID *</label>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Generic Name (Drug Name) *</label>
                     <input
-                      type="text"
-                      required
-                      value={formId}
-                      onChange={(e) => setFormId(e.target.value)}
-                      disabled={!!editingMed}
-                      className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 text-slate-800 text-sm rounded-lg py-2 px-3 focus:outline-none transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Generic Name (Medicine Name) *</label>
-                    <input
+                      list="generic-suggestions"
                       type="text"
                       required
                       value={formGenericName}
-                      onChange={(e) => setFormGenericName(e.target.value)}
+                      onChange={(e) => {
+                        setFormGenericName(e.target.value);
+                        if (!editingMed) setFormId(generateStableId(e.target.value, formTradeName));
+                      }}
                       placeholder="e.g. Paracetamol"
                       className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 text-slate-800 text-xs rounded-lg py-2 px-3 focus:outline-none"
                     />
+                    <datalist id="generic-suggestions">
+                      {Array.from(new Set(medicines.map(m => m.genericName).filter(Boolean))).map(g => (
+                        <option key={g} value={g} />
+                      ))}
+                    </datalist>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Trade Name (Brand Name) *</label>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Trade / Brand Name *</label>
                     <input
                       type="text"
                       required
                       value={formTradeName}
-                      onChange={(e) => setFormTradeName(e.target.value)}
+                      onChange={(e) => {
+                        setFormTradeName(e.target.value);
+                        if (!editingMed) setFormId(generateStableId(formGenericName, e.target.value));
+                      }}
                       placeholder="e.g. Panadol 500mg"
                       className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 text-slate-800 text-xs rounded-lg py-2 px-3 focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Category / Class</label>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Medicine ID *
+                      <span className="ml-1 text-slate-400 font-normal">(auto-generated, editable)</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formId}
+                      onChange={(e) => setFormId(e.target.value)}
+                      disabled={!!editingMed}
+                      className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 text-slate-800 text-xs rounded-lg py-2 px-3 focus:outline-none font-mono disabled:opacity-60 disabled:cursor-not-allowed"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Category / Drug Class</label>
                     <input
                       type="text"
                       value={formCategory}
