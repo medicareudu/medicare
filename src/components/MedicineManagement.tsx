@@ -388,6 +388,11 @@ export const MedicineManagement: React.FC = () => {
       }
     });
 
+    const fallbackCol = mapping.genericName || mapping.name || mapping.tradeName;
+    if (!mapping.genericName && fallbackCol) mapping.genericName = fallbackCol;
+    if (!mapping.tradeName && fallbackCol) mapping.tradeName = fallbackCol;
+    if (!mapping.name && fallbackCol) mapping.name = fallbackCol;
+
     return mapping;
   };
 
@@ -398,9 +403,9 @@ export const MedicineManagement: React.FC = () => {
       const errors: string[] = [];
 
       const id = String(row[mapping.id] || '').trim().toUpperCase();
-      const genericName = String(row[mapping.genericName] || row[mapping.name] || '').trim();
-      const tradeName = String(row[mapping.tradeName] || '').trim();
-      const name = genericName;
+      const genericName = String(row[mapping.genericName] || row[mapping.name] || row[mapping.tradeName] || '').trim();
+      const tradeName = String(row[mapping.tradeName] || row[mapping.genericName] || row[mapping.name] || '').trim();
+      const name = genericName || tradeName;
       const category = String(row[mapping.category] || '').trim();
       const qtyVal = row[mapping.qty];
       const expiryVal = row[mapping.expiry];
@@ -409,8 +414,7 @@ export const MedicineManagement: React.FC = () => {
       const minThresholdVal = row[mapping.minThreshold];
 
       if (!id) errors.push('Medicine ID is required');
-      if (!genericName) errors.push('Generic Name (Medicine Name) is required');
-      if (!tradeName) errors.push('Trade Name (Brand Name) is required');
+      if (!genericName && !tradeName) errors.push('Medicine Name (Generic or Trade) is required');
 
       const qty = Number(qtyVal);
       if (qtyVal === '' || qtyVal === undefined || qtyVal === null) {
@@ -611,18 +615,20 @@ export const MedicineManagement: React.FC = () => {
   };
 
   const handleProceedToPreview = () => {
-    if (!columnMapping.genericName && !columnMapping.name) {
-      setImportError('Please map at least the "Generic Name" column to proceed.');
-      return;
-    }
-    if (!columnMapping.tradeName) {
-      setImportError('Please map the "Trade Name / Brand" column to proceed.');
+    const effectiveMapping = { ...columnMapping };
+    const mainNameCol = effectiveMapping.genericName || effectiveMapping.name || effectiveMapping.tradeName;
+    if (!effectiveMapping.genericName) effectiveMapping.genericName = mainNameCol;
+    if (!effectiveMapping.tradeName) effectiveMapping.tradeName = mainNameCol;
+    if (!effectiveMapping.name) effectiveMapping.name = mainNameCol;
+
+    if (!mainNameCol) {
+      setImportError('Please map at least one Medicine Name column to proceed.');
       return;
     }
     setImportError('');
     
     // Map & validate rows to set default selected indices
-    const validated = mapAndValidateRows(rawRows, columnMapping);
+    const validated = mapAndValidateRows(rawRows, effectiveMapping);
     const initialActions: Record<number, 'update' | 'skip'> = {};
     const initialSelected = new Set<number>();
     validated.forEach((row, idx) => {
@@ -1383,19 +1389,39 @@ export const MedicineManagement: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* Medicine Name Field */}
+                        {/* Generic Name Field */}
                         <div className="grid grid-cols-5 items-center gap-4 bg-slate-50/50 p-2.5 rounded-lg border border-slate-100">
                           <div className="col-span-2">
-                            <span className="text-xs font-bold text-slate-700 block">Medicine Name *</span>
-                            <span className="text-[10px] text-slate-400">Product brand/generic label</span>
+                            <span className="text-xs font-bold text-slate-700 block">Generic Name *</span>
+                            <span className="text-[10px] text-slate-400">Primary active ingredient</span>
                           </div>
                           <div className="col-span-3">
                             <select
-                              value={columnMapping.name}
-                              onChange={(e) => setColumnMapping({ ...columnMapping, name: e.target.value })}
+                              value={columnMapping.genericName || columnMapping.name}
+                              onChange={(e) => setColumnMapping({ ...columnMapping, genericName: e.target.value, name: e.target.value })}
                               className="w-full bg-white border border-slate-200 focus:border-sky-500 text-slate-800 text-xs rounded-md py-1.5 px-2 focus:outline-none cursor-pointer"
                             >
                               <option value="">-- Select Column --</option>
+                              {rawHeaders.map(h => (
+                                <option key={h} value={h}>{h}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+
+                        {/* Trade Name / Brand Field */}
+                        <div className="grid grid-cols-5 items-center gap-4 bg-slate-50/50 p-2.5 rounded-lg border border-slate-100">
+                          <div className="col-span-2">
+                            <span className="text-xs font-bold text-slate-700 block">Trade Name / Brand</span>
+                            <span className="text-[10px] text-slate-400">Commercial Brand (e.g. Panadol)</span>
+                          </div>
+                          <div className="col-span-3">
+                            <select
+                              value={columnMapping.tradeName}
+                              onChange={(e) => setColumnMapping({ ...columnMapping, tradeName: e.target.value })}
+                              className="w-full bg-white border border-slate-200 focus:border-sky-500 text-slate-800 text-xs rounded-md py-1.5 px-2 focus:outline-none cursor-pointer"
+                            >
+                              <option value="">-- [Default same as Generic] --</option>
                               {rawHeaders.map(h => (
                                 <option key={h} value={h}>{h}</option>
                               ))}
