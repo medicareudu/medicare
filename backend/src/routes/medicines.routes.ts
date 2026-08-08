@@ -184,8 +184,13 @@ router.post(
     const medicines = await prisma.$transaction(async (tx) => {
       const allMeds = await tx.medicine.findMany();
       for (const item of items) {
-        const medicineId = item.id.toUpperCase().trim();
-        const existing = await findExistingMedicine(tx, medicineId, item.name, allMeds);
+        const medicineId = (item.id || '').toUpperCase().trim();
+        const searchName = (item.genericName || item.name || item.tradeName || '').trim();
+        const existing = await findExistingMedicine(tx, medicineId, searchName, allMeds);
+
+        const genericNameStr = (item.genericName || item.name || item.tradeName || 'Unknown').trim();
+        const tradeNameStr = (item.tradeName || item.genericName || item.name || 'Unknown').trim();
+        const supplierStr = (item.supplier || 'PharmaCo').trim();
 
         if (existing) {
           if (item.action === 'skip') {
@@ -196,15 +201,15 @@ router.post(
             where: { uid: existing.uid },
             data: {
               medicineId,
-              name: item.genericName.trim(),
-              genericName: item.genericName.trim(),
-              tradeName: item.tradeName.trim(),
-              category: item.category,
-              qty: existing.qty + item.qty,
-              expiry: item.expiry,
-              supplier: item.supplier.trim(),
-              price: item.price,
-              minThreshold: item.minThreshold,
+              name: genericNameStr,
+              genericName: genericNameStr,
+              tradeName: tradeNameStr,
+              category: item.category || 'General',
+              qty: (existing.qty ?? 0) + (item.qty ?? 0),
+              expiry: item.expiry || '2027-12-31',
+              supplier: supplierStr,
+              price: item.price ?? 0,
+              minThreshold: item.minThreshold ?? 50,
             },
           });
           updateCount++;
@@ -212,15 +217,15 @@ router.post(
           await tx.medicine.create({
             data: {
               medicineId,
-              name: item.genericName.trim(),
-              genericName: item.genericName.trim(),
-              tradeName: item.tradeName.trim(),
-              category: item.category,
-              qty: item.qty,
-              expiry: item.expiry,
-              supplier: item.supplier.trim(),
-              price: item.price,
-              minThreshold: item.minThreshold,
+              name: genericNameStr,
+              genericName: genericNameStr,
+              tradeName: tradeNameStr,
+              category: item.category || 'General',
+              qty: item.qty ?? 0,
+              expiry: item.expiry || '2027-12-31',
+              supplier: supplierStr,
+              price: item.price ?? 0,
+              minThreshold: item.minThreshold ?? 50,
             },
           });
           addCount++;

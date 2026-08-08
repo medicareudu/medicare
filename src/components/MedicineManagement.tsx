@@ -222,19 +222,25 @@ export const MedicineManagement: React.FC = () => {
 
   // ─── Filter Logic ───
   const filteredMedicines = medicines.filter(m => {
-    const matchesSearch = m.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          m.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          m.genericName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          (m.tradeName && m.tradeName.toLowerCase().includes(searchTerm.toLowerCase()));
+    if (!m) return false;
+    const searchLower = (searchTerm || '').toLowerCase();
+    const nameMatch = (m.name || '').toLowerCase().includes(searchLower);
+    const idMatch = (m.id || '').toLowerCase().includes(searchLower);
+    const genericMatch = (m.genericName || '').toLowerCase().includes(searchLower);
+    const tradeMatch = (m.tradeName || '').toLowerCase().includes(searchLower);
+    const matchesSearch = nameMatch || idMatch || genericMatch || tradeMatch;
+
     const matchesCategory = selectedCategory === 'All' || m.category === selectedCategory;
     
     let matchesStock = true;
+    const qty = m.qty ?? 0;
+    const minThresh = m.minThreshold ?? 50;
     if (selectedStockLevel === 'Critical') {
-      matchesStock = m.qty < 20;
+      matchesStock = qty < 20;
     } else if (selectedStockLevel === 'Low') {
-      matchesStock = m.qty >= 20 && m.qty < (m.minThreshold ?? 50);
+      matchesStock = qty >= 20 && qty < minThresh;
     } else if (selectedStockLevel === 'Well Stocked') {
-      matchesStock = m.qty >= (m.minThreshold ?? 50);
+      matchesStock = qty >= minThresh;
     }
 
     return matchesSearch && matchesCategory && matchesStock;

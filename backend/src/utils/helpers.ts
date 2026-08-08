@@ -26,28 +26,40 @@ export async function addHistoryLog(
 export async function findExistingMedicine(
   tx: any,
   medicineId: string,
-  name: string,
+  name: string = '',
   cachedMeds?: any[]
 ) {
+  const safeId = (medicineId || '').toUpperCase().trim();
+  const safeName = (name || '').trim();
+
   // 1. Match by Unique ID
-  const existingById = await tx.medicine.findUnique({
-    where: { medicineId: medicineId.toUpperCase().trim() }
-  });
-  if (existingById) return existingById;
+  if (safeId) {
+    const existingById = await tx.medicine.findUnique({
+      where: { medicineId: safeId }
+    });
+    if (existingById) return existingById;
+  }
 
   // 2. Match by Name (exact case-insensitive)
-  const existingByName = await tx.medicine.findFirst({
-    where: { name: { equals: name.trim(), mode: 'insensitive' } }
-  });
-  if (existingByName) return existingByName;
+  if (safeName) {
+    const existingByName = await tx.medicine.findFirst({
+      where: { name: { equals: safeName, mode: 'insensitive' } }
+    });
+    if (existingByName) return existingByName;
+  }
 
   // 3. Fallback: Fuzzy/substring name comparison
+  if (!safeName) return null;
+
   const allMeds = cachedMeds || await tx.medicine.findMany();
-  const cleanInput = name.trim().toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
+  const cleanInput = safeName.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
+  if (!cleanInput) return null;
   const prefixInput = cleanInput.substring(0, 4);
 
   const matched = allMeds.find((m: any) => {
-    const cleanDb = m.name.trim().toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
+    const dbName = (m.name || m.genericName || m.tradeName || '');
+    const cleanDb = dbName.trim().toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
+    if (!cleanDb) return false;
     if (cleanDb === cleanInput) return true;
     if (cleanDb.includes(cleanInput) || cleanInput.includes(cleanDb)) return true;
     
@@ -60,12 +72,11 @@ export async function findExistingMedicine(
   return matched || null;
 }
 
-
 export function mapMedicine(m: {
   uid: number;
   medicineId: string;
   name: string;
-  genericName: string;
+  genericName?: string;
   tradeName?: string;
   category: string;
   qty: number;
@@ -76,16 +87,16 @@ export function mapMedicine(m: {
 }) {
   return {
     _uid: m.uid,
-    id: m.medicineId,
-    name: m.genericName || m.name,
-    genericName: m.genericName || m.name,
-    tradeName: m.tradeName || m.name,
-    category: m.category,
-    qty: m.qty,
-    expiry: m.expiry,
-    supplier: m.supplier,
-    price: m.price,
-    minThreshold: m.minThreshold,
+    id: m.medicineId || '',
+    name: m.genericName || m.name || '',
+    genericName: m.genericName || m.name || '',
+    tradeName: m.tradeName || m.name || '',
+    category: m.category || 'General',
+    qty: m.qty ?? 0,
+    expiry: m.expiry || '2027-12-31',
+    supplier: m.supplier || '',
+    price: Number(m.price) || 0,
+    minThreshold: m.minThreshold ?? 50,
   };
 }
 
