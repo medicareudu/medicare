@@ -179,6 +179,7 @@ export const MedicineManagement: React.FC = () => {
   const [formId, setFormId] = useState('');
   const [formName, setFormName] = useState('');
   const [formGenericName, setFormGenericName] = useState('');
+  const [formTradeName, setFormTradeName] = useState('');
   const [formCategory, setFormCategory] = useState('');
   const [formQty, setFormQty] = useState(100);
   const [formExpiry, setFormExpiry] = useState('');
@@ -201,6 +202,7 @@ export const MedicineManagement: React.FC = () => {
     id: '',
     name: '',
     genericName: '',
+    tradeName: '',
     category: '',
     qty: '',
     expiry: '',
@@ -222,7 +224,8 @@ export const MedicineManagement: React.FC = () => {
   const filteredMedicines = medicines.filter(m => {
     const matchesSearch = m.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           m.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          m.genericName.toLowerCase().includes(searchTerm.toLowerCase());
+                          m.genericName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          (m.tradeName && m.tradeName.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === 'All' || m.category === selectedCategory;
     
     let matchesStock = true;
@@ -243,6 +246,7 @@ export const MedicineManagement: React.FC = () => {
     setFormId(`MED-${Math.floor(100 + Math.random() * 900)}`);
     setFormName('');
     setFormGenericName('');
+    setFormTradeName('');
     setFormCategory('');
     setFormQty(100);
     setFormExpiry('');
@@ -257,6 +261,7 @@ export const MedicineManagement: React.FC = () => {
     setFormId(med.id);
     setFormName(med.name);
     setFormGenericName(med.genericName);
+    setFormTradeName(med.tradeName || '');
     setFormCategory(med.category);
     setFormQty(med.qty);
     setFormExpiry(med.expiry);
@@ -268,12 +273,13 @@ export const MedicineManagement: React.FC = () => {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formName.trim() || !formId.trim()) return;
+    if (!formGenericName.trim() || !formTradeName.trim() || !formId.trim()) return;
 
     const payload = {
       id: formId.trim().toUpperCase(),
-      name: formName.trim(),
+      name: formGenericName.trim(),
       genericName: formGenericName.trim(),
+      tradeName: formTradeName.trim(),
       category: formCategory.trim() || 'General',
       qty: Number(formQty),
       expiry: formExpiry || '2027-12-31',
@@ -346,6 +352,7 @@ export const MedicineManagement: React.FC = () => {
       id: '',
       name: '',
       genericName: '',
+      tradeName: '',
       category: '',
       qty: '',
       expiry: '',
@@ -356,8 +363,9 @@ export const MedicineManagement: React.FC = () => {
 
     const rules = {
       id: ['id', 'code', 'medicine id', 'med id', 'item id', 'sku', 'reference', 'medicine_id', 'item_id', 'medid', 'medcode'],
-      name: ['trade name', 'brand name', 'name', 'medicine', 'product', 'item name', 'description', 'title', 'medicine_name', 'item_name', 'product_name', 'brand'],
-      genericName: ['generic', 'generic name', 'active ingredient', 'ingredient', 'formula'],
+      name: ['medicine name', 'medicine', 'drug name', 'drug', 'item name', 'name'],
+      genericName: ['generic', 'generic name', 'active ingredient', 'ingredient', 'formula', 'medicine name', 'med name'],
+      tradeName: ['trade name', 'trade', 'brand', 'brand name', 'product name', 'brand_name', 'trade_name'],
       category: ['category', 'class', 'group', 'type', 'classification', 'drug class', 'genre'],
       qty: ['quantity', 'qty', 'stock', 'count', 'amount', 'units', 'stock_qty', 'stock_quantity', 'on hand', 'qoh'],
       expiry: ['expiry', 'expire', 'expiry date', 'exp date', 'exp', 'validity', 'expiry_date', 'exp_date', 'expired'],
@@ -390,8 +398,9 @@ export const MedicineManagement: React.FC = () => {
       const errors: string[] = [];
 
       const id = String(row[mapping.id] || '').trim().toUpperCase();
-      const name = String(row[mapping.name] || '').trim();
-      const genericName = String(row[mapping.genericName] || '').trim();
+      const genericName = String(row[mapping.genericName] || row[mapping.name] || '').trim();
+      const tradeName = String(row[mapping.tradeName] || '').trim();
+      const name = genericName;
       const category = String(row[mapping.category] || '').trim();
       const qtyVal = row[mapping.qty];
       const expiryVal = row[mapping.expiry];
@@ -400,8 +409,8 @@ export const MedicineManagement: React.FC = () => {
       const minThresholdVal = row[mapping.minThreshold];
 
       if (!id) errors.push('Medicine ID is required');
-      if (!name) errors.push('Trade Name is required');
-      if (!genericName) errors.push('Generic Name is required');
+      if (!genericName) errors.push('Generic Name (Medicine Name) is required');
+      if (!tradeName) errors.push('Trade Name (Brand Name) is required');
 
       const qty = Number(qtyVal);
       if (qtyVal === '' || qtyVal === undefined || qtyVal === null) {
@@ -436,8 +445,9 @@ export const MedicineManagement: React.FC = () => {
 
       return {
         id: id || `ROW-${index + 1}`,
-        name: name || `Row ${index + 1}`,
+        name: genericName || name || `Row ${index + 1}`,
         genericName: genericName || 'Unknown',
+        tradeName: tradeName || 'Unknown',
         category: category || 'General',
         qty: isNaN(qty) ? 0 : qty,
         expiry,
@@ -601,8 +611,12 @@ export const MedicineManagement: React.FC = () => {
   };
 
   const handleProceedToPreview = () => {
-    if (!columnMapping.name) {
-      setImportError('Please map at least the "Medicine Name" column to proceed.');
+    if (!columnMapping.genericName && !columnMapping.name) {
+      setImportError('Please map at least the "Generic Name" column to proceed.');
+      return;
+    }
+    if (!columnMapping.tradeName) {
+      setImportError('Please map the "Trade Name / Brand" column to proceed.');
       return;
     }
     setImportError('');
@@ -653,8 +667,9 @@ export const MedicineManagement: React.FC = () => {
     try {
       const payload: Array<Omit<Medicine, '_uid'> & { action?: 'update' | 'skip' }> = validRows.map(row => ({
         id: row.id,
-        name: row.name,
+        name: row.genericName,
         genericName: row.genericName,
+        tradeName: row.tradeName,
         category: row.category,
         qty: row.qty,
         expiry: row.expiry,
@@ -860,7 +875,8 @@ export const MedicineManagement: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-5 py-4 whitespace-nowrap">
-                      <div className="font-semibold text-slate-800 text-sm">{m.name}</div>
+                      <div className="font-semibold text-slate-800 text-sm">{m.genericName || m.name}</div>
+                      <div className="text-xs text-sky-600 font-medium mt-0.5">Brand: {m.tradeName || m.name}</div>
                       <span className="inline-block bg-slate-100 text-slate-600 rounded text-[10px] font-semibold tracking-wide px-1.5 py-0.5 mt-1">
                         {m.category || 'General'}
                       </span>
@@ -975,31 +991,31 @@ export const MedicineManagement: React.FC = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Trade Name *</label>
-                    <input
-                      type="text"
-                      required
-                      value={formName}
-                      onChange={(e) => setFormName(e.target.value)}
-                      placeholder="e.g. Panadol 500mg"
-                      className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 text-slate-800 text-sm rounded-lg py-2 px-3 focus:outline-none transition-colors duration-150"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Generic Name *</label>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Generic Name (Medicine Name) *</label>
                     <input
                       type="text"
                       required
                       value={formGenericName}
                       onChange={(e) => setFormGenericName(e.target.value)}
                       placeholder="e.g. Paracetamol"
-                      className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 text-slate-800 text-sm rounded-lg py-2 px-3 focus:outline-none transition-colors duration-150"
+                      className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 text-slate-800 text-xs rounded-lg py-2 px-3 focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Trade Name (Brand Name) *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formTradeName}
+                      onChange={(e) => setFormTradeName(e.target.value)}
+                      placeholder="e.g. Panadol 500mg"
+                      className="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 text-slate-800 text-xs rounded-lg py-2 px-3 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Category / Class</label>
                     <input
                       type="text"
                       value={formCategory}

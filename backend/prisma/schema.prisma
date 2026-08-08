@@ -71,6 +71,7 @@ model Medicine {
   medicineId   String   @unique
   name         String
   genericName  String   @default("Unknown")
+  tradeName    String   @default("")
   category     String
   qty          Int      @default(0)
   expiry       String

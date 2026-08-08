@@ -3,6 +3,7 @@ export interface Medicine {
   id: string; // e.g. MED-001
   name: string;
   genericName: string;
+  tradeName: string;
   category: string;
   qty: number;
   expiry: string; // YYYY-MM-DD

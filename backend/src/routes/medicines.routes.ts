@@ -9,8 +9,9 @@ const router = Router();
 
 const medicineSchema = z.object({
   id: z.string().min(1),
-  name: z.string().min(1),
-  genericName: z.string().min(1),
+  name: z.string().optional(),
+  genericName: z.string().min(1, 'Generic Name is required'),
+  tradeName: z.string().min(1, 'Trade Name is required'),
   category: z.string().default('General'),
   qty: z.number().int().min(0),
   expiry: z.string().min(1),
@@ -41,8 +42,9 @@ router.post(
         where: { uid: existing.uid },
         data: {
           medicineId: data.id,
-          name: data.name.trim(),
+          name: (data.genericName || data.name || '').trim(),
           genericName: data.genericName.trim(),
+          tradeName: data.tradeName.trim(),
           qty: existing.qty + data.qty,
           price: data.price,
           expiry: data.expiry,
@@ -64,8 +66,9 @@ router.post(
     const medicine = await prisma.medicine.create({
       data: {
         medicineId: data.id,
-        name: data.name.trim(),
+        name: (data.genericName || data.name || '').trim(),
         genericName: data.genericName.trim(),
+        tradeName: data.tradeName.trim(),
         category: data.category,
         qty: data.qty,
         expiry: data.expiry,
@@ -97,8 +100,9 @@ router.put(
       where: { uid },
       data: {
         ...(data.id && { medicineId: data.id }),
-        ...(data.name && { name: data.name }),
+        ...(data.genericName && { name: data.genericName }),
         ...(data.genericName && { genericName: data.genericName }),
+        ...(data.tradeName && { tradeName: data.tradeName }),
         ...(data.category !== undefined && { category: data.category }),
         ...(data.qty !== undefined && { qty: data.qty }),
         ...(data.expiry && { expiry: data.expiry }),
@@ -146,8 +150,9 @@ router.post(
   asyncHandler(async (req, res) => {
     const importItemSchema = z.object({
       id: z.string().min(1, 'Medicine ID is required'),
-      name: z.string().min(1, 'Medicine name is required'),
+      name: z.string().optional(),
       genericName: z.string().min(1, 'Generic name is required'),
+      tradeName: z.string().min(1, 'Trade name is required'),
       category: z.string().default('General'),
       qty: z.number().int('Quantity must be a whole number').min(0, 'Quantity cannot be negative'),
       expiry: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Expiry must be YYYY-MM-DD'),
@@ -191,8 +196,9 @@ router.post(
             where: { uid: existing.uid },
             data: {
               medicineId,
-              name: item.name.trim(),
+              name: item.genericName.trim(),
               genericName: item.genericName.trim(),
+              tradeName: item.tradeName.trim(),
               category: item.category,
               qty: existing.qty + item.qty,
               expiry: item.expiry,
@@ -206,8 +212,9 @@ router.post(
           await tx.medicine.create({
             data: {
               medicineId,
-              name: item.name.trim(),
+              name: item.genericName.trim(),
               genericName: item.genericName.trim(),
+              tradeName: item.tradeName.trim(),
               category: item.category,
               qty: item.qty,
               expiry: item.expiry,

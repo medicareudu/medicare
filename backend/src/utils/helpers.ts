@@ -66,6 +66,7 @@ export function mapMedicine(m: {
   medicineId: string;
   name: string;
   genericName: string;
+  tradeName?: string;
   category: string;
   qty: number;
   expiry: string;
@@ -76,8 +77,9 @@ export function mapMedicine(m: {
   return {
     _uid: m.uid,
     id: m.medicineId,
-    name: m.name,
-    genericName: m.genericName,
+    name: m.genericName || m.name,
+    genericName: m.genericName || m.name,
+    tradeName: m.tradeName || m.name,
     category: m.category,
     qty: m.qty,
     expiry: m.expiry,
