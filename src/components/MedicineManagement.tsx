@@ -1577,7 +1577,7 @@ export const MedicineManagement: React.FC = () => {
                         {rawRows.length > 0 ? (
                           (() => {
                             const firstRowObj = rawRows[0];
-                            const mappedSample = mapAndValidateRows([firstRowObj], columnMapping)[0];
+                            const mappedSample = mapAndValidateRows([firstRowObj], columnMapping)[0] || { id: '', name: '', category: '', qty: 0, price: 0, expiry: '', supplier: '', warnings: [] };
                             return (
                               <div className="space-y-2.5 text-xs text-slate-600">
                                 <div>
@@ -1599,7 +1599,7 @@ export const MedicineManagement: React.FC = () => {
                                   </div>
                                   <div>
                                     <span className="text-[10px] font-semibold text-slate-400 block">Unit Cost:</span>
-                                    <span className="font-mono font-bold text-slate-800">LKR {mappedSample.price.toFixed(2)}</span>
+                                    <span className="font-mono font-bold text-slate-800">LKR {(Number(mappedSample.price) || 0).toFixed(2)}</span>
                                   </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
@@ -1829,7 +1829,7 @@ export const MedicineManagement: React.FC = () => {
                                 <td className="px-4 py-3 text-center font-mono font-bold text-slate-700">{row.qty}</td>
                                 <td className="px-4 py-3 font-mono text-slate-500">{row.expiry}</td>
                                 <td className="px-4 py-3 text-slate-500 truncate max-w-[100px]" title={row.supplier}>{row.supplier}</td>
-                                <td className="px-4 py-3 font-mono font-semibold text-slate-800">LKR {row.price.toFixed(2)}</td>
+                                <td className="px-4 py-3 font-mono font-semibold text-slate-800">LKR {(Number(row.price) || 0).toFixed(2)}</td>
                               </tr>
                             );
                           });
