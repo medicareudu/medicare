@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useAppState } from '../context/StateContext';
 import { Medicine, AdditionalCharge, PrescriptionItem, Prescription } from '../types';
 import { FilePlus, Check, Pill, Plus, X, AlertCircle, Receipt, Printer, ArrowLeft, RefreshCw } from 'lucide-react';
@@ -93,14 +93,14 @@ export const NewRequest: React.FC = () => {
     setSelectedMeds(prev => prev.filter(m => m.medicineId !== medId));
   };
 
-  const handleQtyChange = (medId: string, val: number) => {
+  const handleQtyChange = useCallback((medId: string, val: number) => {
     setSelectedMeds(prev => prev.map(m => {
       if (m.medicineId === medId) {
         return { ...m, qty: Math.max(1, val) };
       }
       return m;
     }));
-  };
+  }, []);
 
   // ─── Toggle Additional Charges ───
   const handleToggleCharge = (idx: number) => {
@@ -113,9 +113,11 @@ export const NewRequest: React.FC = () => {
   };
 
   // ─── Bill Calculations ───
-  const medicinesSubtotal = selectedMeds.reduce((acc, m) => acc + (m.qty * m.price), 0);
-  const additionalChargesTotal = additionalCharges.filter(c => c.checked).reduce((acc, c) => acc + c.fee, 0);
-  const totalAmount = Math.max(0, Number(consultationFee) + medicinesSubtotal + additionalChargesTotal - Number(discount));
+  const medicinesSubtotal = useMemo(() => selectedMeds.reduce((acc, m) => acc + (m.qty * m.price), 0), [selectedMeds]);
+  const additionalChargesTotal = useMemo(() => additionalCharges.filter(c => c.checked).reduce((acc, c) => acc + c.fee, 0), [additionalCharges]);
+  const totalAmount = useMemo(() => Math.max(0, Number(consultationFee) + medicinesSubtotal + additionalChargesTotal - Number(discount)), [consultationFee, medicinesSubtotal, additionalChargesTotal, discount]);
+
+  const CONSULTATION_FEE_PRESETS = [500, 600, 700, 800, 1000, 1200, 1500, 2000];
 
   // ─── Submit handler: Generate Bill & Token ───
   const handleGenerateInvoice = async () => {
@@ -383,9 +385,9 @@ export const NewRequest: React.FC = () => {
                   >
                     <option value="">-- Choose Drug --</option>
                     {medicines.map(m => (
-                      <option key={m._uid} value={m.id}>
-                        {m.genericName || m.name} — {m.tradeName || m.name} (LKR {m.price.toFixed(2)} | {m.qty} left)
-                      </option>
+                       <option key={m._uid} value={m.id}>
+                         {m.genericName || m.name} — {m.tradeName || m.name} (LKR {(Number(m.price) || 0).toFixed(2)} | {m.qty} left)
+                       </option>
                     ))}
                   </select>
                 </div>
@@ -491,7 +493,35 @@ export const NewRequest: React.FC = () => {
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-slate-600 font-medium">
                   <span>Consultation Fee:</span>
-                  <span className="font-mono">LKR {Number(consultationFee).toLocaleString()}</span>
+                  <div className="flex flex-col items-end gap-1.5">
+                    <div className="flex flex-wrap gap-1 justify-end">
+                      {CONSULTATION_FEE_PRESETS.map(preset => (
+                        <button
+                          key={preset}
+                          type="button"
+                          onClick={() => setConsultationFee(preset)}
+                          className={`px-2 py-0.5 rounded text-[10px] font-bold border transition ${
+                            consultationFee === preset
+                              ? 'bg-sky-500 text-white border-sky-500 shadow'
+                              : 'bg-white text-slate-600 border-slate-200 hover:border-sky-400 hover:text-sky-600'
+                          }`}
+                        >
+                          {preset}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-[10px] text-slate-400 font-bold">LKR</span>
+                      <input
+                        type="number"
+                        min={0}
+                        step={50}
+                        value={consultationFee}
+                        onChange={e => setConsultationFee(Number(e.target.value))}
+                        className="w-24 text-right bg-slate-50 border border-slate-200 rounded-md py-1 px-2 text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="flex justify-between items-center text-slate-600 font-medium">
                   <span>Prescribed Medications ({selectedMeds.length}):</span>
